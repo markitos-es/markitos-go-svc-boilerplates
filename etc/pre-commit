@@ -6,69 +6,69 @@
 #                      🔒 Markitos DevSecOps Kulture 🔒                      #
 #                          El camino del artesano                            #
 #                                                                            #
-#            "La seguridad es un viaje, no un destino" - Markitos           #
+#            "La seguridad es un viaje, no un destino" - Markitos            #
 #                                                                            #
 #                Created: Marzo 2025       Updated: Marzo 2025               #
 #                                                                            #
 ##############################################################################
-#                                                                            #
-# CÓMO USAR ESTE HOOK:                                                       #
-#                                                                            #
-# 1. Instala gitleaks:                                                       #
-#    • Con package managers:                                                 #
-#      - brew install gitleaks (macOS)                                       #
-#      - apt install gitleaks (Ubuntu)                                       #
-#                                                                            #
-#    • Descarga directa del binario:                                         #
-#      - Linux x64:                                                          #
+#                                                                            
+# CÓMO USAR ESTE HOOK:                                                       
+#                                                                            
+# 1. Instala gitleaks:                                                       
+#    • Con package managers:                                                 
+#      - brew install gitleaks (macOS)                                       
+#      - apt install gitleaks (Ubuntu)                                       
+#                                                                            
+#    • Descarga directa del binario:                                         
+#      - Linux x64:                                                          
 #        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz | tar xz -C /tmp/ #
-#        sudo mv /tmp/gitleaks /usr/local/bin/                              #
-#                                                                            #
-#      - Linux ARM:                                                          #
+#        sudo mv /tmp/gitleaks /usr/local/bin/                              
+#                                                                           
+#      - Linux ARM:                                                         
 #        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_arm64.tar.gz | tar xz -C /tmp/ #
-#        sudo mv /tmp/gitleaks /usr/local/bin/                              #
-#                                                                            #
-#      - macOS Intel:                                                        #
+#        sudo mv /tmp/gitleaks /usr/local/bin/                              
+#                                                                            
+#      - macOS Intel:                                                        
 #        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_darwin_x64.tar.gz | tar xz -C /tmp/ #
-#        sudo mv /tmp/gitleaks /usr/local/bin/                              #
-#                                                                            #
-#      - macOS ARM (M1/M2):                                                  #
-#        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_darwin_arm64.tar.gz | tar xz -C /tmp/ #
-#        sudo mv /tmp/gitleaks /usr/local/bin/                              #
-#                                                                            #
-#      - Windows:                                                            #
-#        Descarga de: https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_windows_x64.zip #
-#        Extrae y agrega al PATH                                             #
-#                                                                            #
-# 2. Instala snyk CLI:                                                       #
-#    • Con npm:                                                              #
-#      npm install -g snyk                                                   #
-#                                                                            #
-#    • Sin npm, con binario directo:                                         #
-#      - macOS:                                                              #
-#        curl https://static.snyk.io/cli/latest/snyk-macos -o snyk           #
-#        chmod +x ./snyk                                                     #
-#        sudo mv ./snyk /usr/local/bin/                                      #
-#                                                                            #
-#      - Linux:                                                              #
-#        curl https://static.snyk.io/cli/latest/snyk-linux -o snyk           #
-#        chmod +x ./snyk                                                     #
-#        sudo mv ./snyk /usr/local/bin/                                      #
-#                                                                            #
-#      - Windows:                                                            #
-#        curl https://static.snyk.io/cli/latest/snyk-win.exe -o snyk.exe     #
-#        # Agrégalo a tu PATH                                                #
-#                                                                            #
-# 3. Configura tu token Snyk:                                                #
-#    - Crea una cuenta en snyk.io                                            #
-#    - Obtén tu token API                                                    #
-#    - Añade a tu ~/.bashrc o ~/.zshrc: export SNYK_TOKEN="tu-token"         #
-#                                                                            #
-# 4. Instala este hook:                                                      #
-#    - cp etc/pre-commit .git/hooks/                                         #
-#    - chmod +x .git/hooks/pre-commit                                        #
-#                                                                            #
-##############################################################################
+#        sudo mv /tmp/gitleaks /usr/local/bin/                              
+#                                                                            
+#      - macOS ARM (M1/M2):                                                  
+#        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_darwin_arm64.tar.gz | tar xz -C /tmp/ 
+#        sudo mv /tmp/gitleaks /usr/local/bin/                              
+#                                                                            
+#      - Windows:                                                            
+#        Descarga de: https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_windows_x64.zip
+#        Extrae y agrega al PATH                                             
+#                                                                            
+# 2. Instala snyk CLI:                                                       
+#    • Con npm:                                                              
+#      npm install -g snyk                                                   
+#                                                                            
+#    • Sin npm, con binario directo:                                         
+#      - macOS:                                                              
+#        curl https://static.snyk.io/cli/latest/snyk-macos -o snyk           
+#        chmod +x ./snyk                                                     
+#        sudo mv ./snyk /usr/local/bin/                                      
+#                                                                            
+#      - Linux:                                                              
+#        curl https://static.snyk.io/cli/latest/snyk-linux -o snyk           
+#        chmod +x ./snyk                                                     
+#        sudo mv ./snyk /usr/local/bin/                                      
+#                                                                            
+#      - Windows:                                                            
+#        curl https://static.snyk.io/cli/latest/snyk-win.exe -o snyk.exe     
+#        # Agrégalo a tu PATH                                                
+#                                                                            
+# 3. Configura tu token Snyk:                                                
+#    - Crea una cuenta en snyk.io                                            
+#    - Obtén tu token API                                                    
+#    - Añade a tu ~/.bashrc o ~/.zshrc: export SNYK_TOKEN="tu-token"         
+#                                                                            
+# 4. Instala este hook:                                                      
+#    - cp etc/pre-commit .git/hooks/                                         
+#    - chmod +x .git/hooks/pre-commit                                        
+#                                                                            
+#############################################################################
 
 # Colores para mejor visualización
 RED='\033[0;31m'
