@@ -23,7 +23,10 @@ func NewBoilerplateCreateService(repository domain.BoilerplateRepository) Boiler
 
 func (s BoilerplateCreateService) Do(request BoilerplateCreateRequest) (*BoilerplateCreateResponse, error) {
 	var id string = domain.UUIDv4()
-	var boiler *domain.Boilerplate = domain.NewBoilerplate(id, request.Name)
+	boiler, err := domain.NewBoilerplate(id, request.Name)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := s.Repository.Create(boiler); err != nil {
 		return nil, err

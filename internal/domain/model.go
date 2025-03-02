@@ -9,11 +9,16 @@ type Boilerplate struct {
 	UpdatedAt time.Time `json:"updated_at" binding:"required,datetime" default:"now"`
 }
 
-func NewBoilerplate(id, name string) *Boilerplate {
+func NewBoilerplate(id, name string) (*Boilerplate, error) {
+	secureId, err := NewBoilerplateId(id)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Boilerplate{
-		Id:        id,
+		Id:        secureId.value,
 		Name:      name,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-	}
+	}, nil
 }
