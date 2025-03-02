@@ -7,4 +7,7 @@ postgres:
 run:
 	go run cmd/main.go
 prun:
-	GIN_MODE=release go run cmd/main.go	
+	GIN_MODE=release go run cmd/main.go
+sast:
+	@echo "Running Snyk security analysis..."
+	@SNYK_TOKEN=${SNYK_TOKEN} snyk code test
