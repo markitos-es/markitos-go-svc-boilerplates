@@ -12,13 +12,13 @@ type Server struct {
 }
 
 func NewServer(address string, repository domain.BoilerplateRepository) *Server {
-	server := &Server{
+	apiREST := &Server{
 		address:    address,
 		repository: repository,
 	}
-	server.createRouter()
+	apiREST.createRouter()
 
-	return server
+	return apiREST
 }
 
 func (s *Server) Repository() domain.BoilerplateRepository {

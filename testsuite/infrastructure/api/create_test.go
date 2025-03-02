@@ -19,7 +19,7 @@ func TestBoilerCreateHandler_Success(t *testing.T) {
 	request, _ := http.NewRequest(http.MethodPost, "/v1/boilerplates", bytes.NewBuffer(requestBody))
 	request.Header.Set("Content-Type", "application/json")
 
-	boilerApiServer.Router().ServeHTTP(recorder, request)
+	RESTRouter().ServeHTTP(recorder, request)
 
 	assert.Equal(t, http.StatusCreated, recorder.Code)
 }

@@ -9,10 +9,10 @@ type BoilerPostgresRepository struct {
 	db *gorm.DB
 }
 
-func NewBoilerPostgresRepository(db *gorm.DB) *BoilerPostgresRepository {
-	return &BoilerPostgresRepository{db: db}
+func NewBoilerPostgresRepository(db *gorm.DB) BoilerPostgresRepository {
+	return BoilerPostgresRepository{db: db}
 }
 
-func (r *BoilerPostgresRepository) Create(boiler *domain.Boilerplate) error {
-	return r.db.Create(boiler).Error
+func (r *BoilerPostgresRepository) Create(boilerplate *domain.Boilerplate) error {
+	return r.db.Create(boilerplate).Error
 }

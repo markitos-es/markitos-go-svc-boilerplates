@@ -56,5 +56,7 @@ func loadDatabase() domain.BoilerplateRepository {
 		log.Fatal("['.']:> error unable to migrate database:", err)
 	}
 
-	return database.NewBoilerPostgresRepository(db)
+	repo := database.NewBoilerPostgresRepository(db)
+
+	return &repo
 }
