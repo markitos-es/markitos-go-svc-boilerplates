@@ -8,6 +8,9 @@ run:
 	go run cmd/main.go
 prun:
 	GIN_MODE=release go run cmd/main.go
-sast:
+security:
+	@echo "Running Go security analysis..."
 	@echo "Running Snyk security analysis..."
 	@SNYK_TOKEN=${SNYK_TOKEN} snyk code test
+	@echo "Running Gitleaks security analysis..."
+	@gitleaks detect .
