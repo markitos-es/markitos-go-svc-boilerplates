@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "98185207-a512-44ca-9b9a-23025e08bea4",
+		"name": "markitos-svc-boilerplates",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40277391"
+	},
+	"item": [
+		{
+			"name": "CREATE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{$guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/v1/boilerplates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"v1",
+						"boilerplates"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
