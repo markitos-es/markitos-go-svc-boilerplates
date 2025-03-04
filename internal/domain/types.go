@@ -29,18 +29,8 @@ func NewBoilerplateName(value string) (*BoilerplateName, error) {
 	return nil, fmt.Errorf("invalid boilerplate name, only letters and spaces, start/end with letter, received: %s", value)
 }
 
-func (b *BoilerplateName) Value() string {
-	return b.value
-}
-
-func GetBoilerplateNameRandom() *BoilerplateName {
-	result, _ := NewBoilerplateName(RandomPersonalName())
-
-	return result
-}
-
 func isValidBoilerplateName(value string) bool {
-	pattern := `^[a-zA-Z]{1}[a-zA-Z ]+[a-zA-Z]{1,}$`
+	pattern := `^[a-zA-Z]{1}[a-zA-Z ]+[a-zA-Z]$|^[a-zA-Z]$`
 	matched, _ := regexp.MatchString(pattern, value)
 
 	return matched

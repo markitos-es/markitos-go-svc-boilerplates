@@ -14,7 +14,6 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	secureName, err := NewBoilerplateName(name)
 	if err != nil {
 		return nil, err

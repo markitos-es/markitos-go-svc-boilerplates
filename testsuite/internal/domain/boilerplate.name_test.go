@@ -38,12 +38,3 @@ func TestCanCreateValidBoilerplateName(t *testing.T) {
 		}
 	}
 }
-
-func TestCanCreateARandomValidName(t *testing.T) {
-	for range 20 {
-		sut := domain.GetBoilerplateNameRandom()
-		if sut == nil {
-			t.Error("expected valid name, but got invalid value")
-		}
-	}
-}
