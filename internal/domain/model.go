@@ -15,9 +15,14 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 		return nil, err
 	}
 
+	secureName, err := NewBoilerplateName(name)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Boilerplate{
 		Id:        secureId.value,
-		Name:      name,
+		Name:      secureName.value,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}, nil
