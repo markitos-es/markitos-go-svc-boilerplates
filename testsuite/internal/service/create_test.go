@@ -10,7 +10,7 @@ import (
 
 func TestCanCreateAUser(t *testing.T) {
 	var request services.BoilerplateCreateRequest = services.BoilerplateCreateRequest{
-		Name: "Test",
+		Name: "Marco Antonio",
 	}
 
 	var service services.BoilerplateCreateService = services.NewBoilerplateCreateService(repository)

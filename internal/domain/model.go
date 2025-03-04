@@ -26,3 +26,12 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 		UpdatedAt: time.Now(),
 	}, nil
 }
+
+func GetRandomBoilerplate() *Boilerplate {
+	return &Boilerplate{
+		Id:        UUIDv4(),
+		Name:      "Hello World",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+}
