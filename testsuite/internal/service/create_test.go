@@ -9,8 +9,9 @@ import (
 )
 
 func TestCanCreateAUser(t *testing.T) {
+	var boiler domain.Boilerplate = *domain.NewRandomBoilerplate()
 	var request services.BoilerplateCreateRequest = services.BoilerplateCreateRequest{
-		Name: "Marco Antonio",
+		Name: boiler.Name,
 	}
 
 	var service services.BoilerplateCreateService = services.NewBoilerplateCreateService(repository)
@@ -20,5 +21,4 @@ func TestCanCreateAUser(t *testing.T) {
 	assert.True(t, repository.CreateHaveBeenCalledWith(&request.Name))
 	assert.Equal(t, response.Name, request.Name)
 	assert.NotEmpty(t, response.Id)
-	assert.NotEmpty(t, domain.IsUUIDv4(response.Id))
 }

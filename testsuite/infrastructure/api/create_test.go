@@ -14,7 +14,7 @@ import (
 
 func TestBoilerCreateHandler_Success(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	boiler := domain.GetRandomBoilerplate()
+	boiler := domain.NewRandomBoilerplate()
 	requestBody, _ := json.Marshal(services.BoilerplateCreateRequest{
 		Name: boiler.Name,
 	})

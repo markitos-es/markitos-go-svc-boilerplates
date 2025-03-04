@@ -10,7 +10,7 @@ import (
 )
 
 func TestBoilerCreate(t *testing.T) {
-	boiler := domain.GetRandomBoilerplate()
+	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
 	err := testdb.GetRepository().Create(boiler)
 	require.NoError(t, err)
 

@@ -14,6 +14,7 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	secureName, err := NewBoilerplateName(name)
 	if err != nil {
 		return nil, err
@@ -27,10 +28,10 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 	}, nil
 }
 
-func GetRandomBoilerplate() *Boilerplate {
+func NewRandomBoilerplate() *Boilerplate {
 	return &Boilerplate{
 		Id:        UUIDv4(),
-		Name:      "Hello World",
+		Name:      "Marco Antonio",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
