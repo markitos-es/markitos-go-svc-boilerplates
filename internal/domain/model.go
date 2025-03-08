@@ -28,6 +28,12 @@ func NewBoilerplate(id, name string) (*Boilerplate, error) {
 	}, nil
 }
 
+func (b *Boilerplate) GetId() *BoilerplateId {
+	result, _ := NewBoilerplateId(b.Id)
+
+	return result
+}
+
 func NewRandomBoilerplate() *Boilerplate {
 	return &Boilerplate{
 		Id:        UUIDv4(),

@@ -17,6 +17,10 @@ func NewBoilerplateId(value string) (*BoilerplateId, error) {
 	return nil, fmt.Errorf("invalid boilerplate id, must be an uuid v4, received: %s", value)
 }
 
+func (b *BoilerplateId) Value() string {
+	return b.value
+}
+
 type BoilerplateName struct {
 	value string
 }

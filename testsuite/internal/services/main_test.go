@@ -1,4 +1,4 @@
-package service_test
+package services_test
 
 import (
 	"os"
@@ -9,11 +9,13 @@ import (
 
 type MockSpyBoilerRepository struct {
 	LastCreatedBoilerName *string
+	LastDeleteBoilerId    *string
 }
 
 func NewMockSpyBoilerRepository() *MockSpyBoilerRepository {
 	return &MockSpyBoilerRepository{
 		LastCreatedBoilerName: nil,
+		LastDeleteBoilerId:    nil,
 	}
 }
 
@@ -29,6 +31,29 @@ func (m *MockSpyBoilerRepository) CreateHaveBeenCalledWith(boilerName *string) b
 	m.LastCreatedBoilerName = nil
 
 	return result
+}
+
+func (m *MockSpyBoilerRepository) Delete(id *domain.BoilerplateId) error {
+	value := id.Value()
+	m.LastDeleteBoilerId = &value
+
+	return nil
+}
+
+func (m *MockSpyBoilerRepository) DeleteHaveBeenCalledWith(boilerId *string) bool {
+	var result bool = m.LastDeleteBoilerId != nil && *m.LastDeleteBoilerId == *boilerId
+
+	m.LastDeleteBoilerId = nil
+
+	return result
+}
+
+func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
+	return nil
+}
+
+func (m *MockSpyBoilerRepository) One(id *domain.BoilerplateId) (*domain.Boilerplate, error) {
+	return domain.NewRandomBoilerplate(), nil
 }
 
 var repository *MockSpyBoilerRepository

@@ -7,8 +7,8 @@ type BoilerplateCreateRequest struct {
 }
 
 type BoilerplateCreateResponse struct {
-	Id   string
-	Name string
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type BoilerplateCreateService struct {

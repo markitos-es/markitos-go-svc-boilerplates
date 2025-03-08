@@ -32,6 +32,8 @@ func (s *Server) Router() *gin.Engine {
 func (s *Server) createRouter() {
 	s.router = gin.Default()
 	s.router.POST("/v1/boilerplates", s.create)
+	s.router.DELETE("/v1/boilerplates/:id", s.delete)
+	s.router.GET("/v1/boilerplates/:id", s.one)
 }
 
 func (s *Server) Run() error {

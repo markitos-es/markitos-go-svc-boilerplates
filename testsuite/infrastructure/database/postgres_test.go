@@ -4,12 +4,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
 	"github.com/stretchr/testify/require"
 )
 
-func TestBoilerCreate(t *testing.T) {
+func TestBoilerplateCreate(t *testing.T) {
 	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
 	err := testdb.GetRepository().Create(boiler)
 	require.NoError(t, err)
@@ -23,4 +24,52 @@ func TestBoilerCreate(t *testing.T) {
 	require.WithinDuration(t, boiler.UpdatedAt, result.UpdatedAt, time.Second)
 
 	testdb.GetDB().Delete(&result)
+}
+
+func TestBoilerplateDelete(t *testing.T) {
+	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	testdb.GetRepository().Create(boiler)
+
+	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
+
+	id, _ := domain.NewBoilerplateId(boiler.Id)
+	err := repository.Delete(id)
+	require.NoError(t, err)
+}
+
+func TestBoilerplateOne(t *testing.T) {
+	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	testdb.GetRepository().Create(boiler)
+
+	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
+
+	result, err := repository.One(boiler.GetId())
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	require.Equal(t, boiler.Id, result.Id)
+	require.Equal(t, boiler.Name, result.Name)
+
+	id, _ := domain.NewBoilerplateId(boiler.Id)
+	err = repository.Delete(id)
+	require.NoError(t, err)
+}
+
+func TestBoilerUpdate(t *testing.T) {
+	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	testdb.GetRepository().Create(boiler)
+
+	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
+
+	boiler.Name = boiler.Name + "Updated"
+	err := repository.Update(boiler)
+	require.NoError(t, err)
+
+	var result domain.Boilerplate
+	err = testdb.GetDB().First(&result, "id = ?", boiler.Id).Error
+	require.NoError(t, err)
+	require.Equal(t, boiler.Name, result.Name)
+
+	id, _ := domain.NewBoilerplateId(boiler.Id)
+	err = repository.Delete(id)
+	require.NoError(t, err)
 }

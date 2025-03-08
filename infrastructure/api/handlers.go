@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,4 +23,49 @@ func (s Server) create(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, response)
+}
+
+func (s Server) delete(ctx *gin.Context) {
+	id, err := s.getQueryParam(ctx, "id")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return
+	}
+
+	request := services.BoilerplateDeleteRequest{Id: *id}
+	var service services.BoilerplateDeleteService = services.NewBoilerplateDeleteService(s.repository)
+	if err := service.Do(request); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nil)
+}
+
+func (s Server) one(ctx *gin.Context) {
+	id, err := s.getQueryParam(ctx, "id")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return
+	}
+
+	request := services.BoilerplateOneRequest{Id: *id}
+	var service services.BoilerplateOneService = services.NewBoilerplateOneService(s.repository)
+	response, err := service.Do(request)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, errorResonses(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response.Data)
+}
+
+func (s Server) getQueryParam(ctx *gin.Context, paramName string) (*string, error) {
+	response := ctx.Param(paramName)
+	if response == "" {
+		return nil, errors.New(paramName + " is required")
+
+	}
+
+	return &response, nil
 }
