@@ -7,10 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/internal/services"
-	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,7 +30,5 @@ func TestBoilerCreateHandler_Success(t *testing.T) {
 	assert.Equal(t, boiler.Name, response["name"])
 	assert.NotEmpty(t, responseId)
 
-	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
-	id, _ := domain.NewBoilerplateId(responseId)
-	repository.Delete(id)
+	deletePersisteRandomBoilerplate(responseId)
 }

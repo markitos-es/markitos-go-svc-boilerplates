@@ -7,16 +7,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/internal/services"
-	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBoilerplateOneHandler_Success(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
-	testdb.GetRepository().Create(boiler)
+	var boiler *domain.Boilerplate = createPersistedRandomBoilerplate()
 
 	recorder := httptest.NewRecorder()
 	requestBody, _ := json.Marshal(services.BoilerplateOneRequest{
@@ -32,7 +29,5 @@ func TestBoilerplateOneHandler_Success(t *testing.T) {
 	assert.Equal(t, response["name"].(string), boiler.Name)
 	assert.Equal(t, response["id"].(string), boiler.Id)
 
-	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
-	id, _ := domain.NewBoilerplateId(response["id"].(string))
-	repository.Delete(id)
+	deletePersisteRandomBoilerplate(response["id"].(string))
 }

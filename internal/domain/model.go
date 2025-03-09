@@ -37,7 +37,7 @@ func (b *Boilerplate) GetId() *BoilerplateId {
 func NewRandomBoilerplate() *Boilerplate {
 	return &Boilerplate{
 		Id:        UUIDv4(),
-		Name:      "Marco Antonio",
+		Name:      RandomPersonalName(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

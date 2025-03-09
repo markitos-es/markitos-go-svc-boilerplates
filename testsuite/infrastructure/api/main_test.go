@@ -6,6 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/markitos/markitos-svc-boilerplate/infrastructure/api"
+	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
+	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
 )
 
@@ -27,4 +29,21 @@ func setupRESTServer() {
 
 func RESTRouter() *gin.Engine {
 	return RESTServer().Router()
+}
+
+func createPersistedRandomBoilerplate() *domain.Boilerplate {
+	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	testdb.GetRepository().Create(boiler)
+
+	return boiler
+}
+
+func deletePersisteRandomBoilerplate(boilerId string) {
+	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
+	id, err := domain.NewBoilerplateId(boilerId)
+	if err != nil {
+		panic(err)
+	}
+
+	repository.Delete(id)
 }

@@ -9,13 +9,11 @@ import (
 
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/internal/services"
-	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBoilerDeleteHandler_Success(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
-	testdb.GetRepository().Create(boiler)
+func TestBoilerplateCanDelete(t *testing.T) {
+	var boiler *domain.Boilerplate = createPersistedRandomBoilerplate()
 
 	recorder := httptest.NewRecorder()
 	requestBody, _ := json.Marshal(services.BoilerplateDeleteRequest{

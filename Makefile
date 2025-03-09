@@ -1,13 +1,13 @@
 test:
-	go clean -testcache && go test  ./...
+	bash bin/test.sh
 testv:
-	go clean -testcache && go test -v ./... 
+	bash bin/testv.sh
 postgres:
-	docker compose up -d
+	bash bin/postgres.sh
 run:
-	go run cmd/main.go
+	bash bin/run.sh
 prun:
-	GIN_MODE=release go run cmd/main.go
+	bash bin/prun.sh
 security:
 	@echo "Running Go security analysis..."
 	@echo "Running Snyk security analysis..."
