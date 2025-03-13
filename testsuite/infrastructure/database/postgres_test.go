@@ -7,11 +7,12 @@ import (
 	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
+	internal_test "github.com/markitos/markitos-svc-boilerplate/testsuite/internal"
 	"github.com/stretchr/testify/require"
 )
 
 func TestBoilerplateCreate(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	var boiler *domain.Boilerplate = internal_test.NewRandomBoilerplate()
 	err := testdb.GetRepository().Create(boiler)
 	require.NoError(t, err)
 
@@ -27,7 +28,7 @@ func TestBoilerplateCreate(t *testing.T) {
 }
 
 func TestBoilerplateDelete(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	var boiler *domain.Boilerplate = internal_test.NewRandomBoilerplate()
 	testdb.GetRepository().Create(boiler)
 
 	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
@@ -38,7 +39,7 @@ func TestBoilerplateDelete(t *testing.T) {
 }
 
 func TestBoilerplateOne(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	var boiler *domain.Boilerplate = internal_test.NewRandomBoilerplate()
 	testdb.GetRepository().Create(boiler)
 
 	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
@@ -55,7 +56,7 @@ func TestBoilerplateOne(t *testing.T) {
 }
 
 func TestBoilerUpdate(t *testing.T) {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	var boiler *domain.Boilerplate = internal_test.NewRandomBoilerplate()
 	testdb.GetRepository().Create(boiler)
 
 	repository := database.NewBoilerPostgresRepository(testdb.GetDB())

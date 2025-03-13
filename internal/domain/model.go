@@ -33,12 +33,3 @@ func (b *Boilerplate) GetId() *BoilerplateId {
 
 	return result
 }
-
-func NewRandomBoilerplate() *Boilerplate {
-	return &Boilerplate{
-		Id:        UUIDv4(),
-		Name:      RandomPersonalName(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
-}

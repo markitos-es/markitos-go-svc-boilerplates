@@ -1,25 +1,20 @@
 package api_test
 
 import (
-	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
-	"github.com/markitos/markitos-svc-boilerplate/internal/services"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBoilerplateOneHandler_Success(t *testing.T) {
+func TestBoilerplateCanGetOne(t *testing.T) {
 	var boiler *domain.Boilerplate = createPersistedRandomBoilerplate()
 
 	recorder := httptest.NewRecorder()
-	requestBody, _ := json.Marshal(services.BoilerplateOneRequest{
-		Id: boiler.Id,
-	})
-	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/"+boiler.Id, bytes.NewBuffer(requestBody))
+	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/"+boiler.Id, nil)
 	request.Header.Set("Content-Type", "application/json")
 	RESTRouter().ServeHTTP(recorder, request)
 
@@ -30,4 +25,31 @@ func TestBoilerplateOneHandler_Success(t *testing.T) {
 	assert.Equal(t, response["id"].(string), boiler.Id)
 
 	deletePersisteRandomBoilerplate(response["id"].(string))
+}
+
+func TestBoilerplateCantGetInvalidId(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/an-invalid-id", nil)
+	request.Header.Set("Content-Type", "application/json")
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusNotFound, recorder.Code)
+}
+
+func TestBoilerplateCantGetMissingId(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/", nil)
+	request.Header.Set("Content-Type", "application/json")
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusNotFound, recorder.Code)
+}
+
+func TestBoilerplateCantGetValidIdButNonExistingResource(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/"+domain.UUIDv4(), nil)
+	request.Header.Set("Content-Type", "application/json")
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusNotFound, recorder.Code)
 }

@@ -5,17 +5,22 @@ import (
 	"testing"
 
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
+	internal_test "github.com/markitos/markitos-svc-boilerplate/testsuite/internal"
 )
 
 type MockSpyBoilerRepository struct {
 	LastCreatedBoilerName *string
 	LastDeleteBoilerId    *string
+	LastOneBoilerId       *string
+	LastUpdatedBoilerId   *string
+	LastUpdatedBoilerName *string
 }
 
 func NewMockSpyBoilerRepository() *MockSpyBoilerRepository {
 	return &MockSpyBoilerRepository{
 		LastCreatedBoilerName: nil,
 		LastDeleteBoilerId:    nil,
+		LastOneBoilerId:       nil,
 	}
 }
 
@@ -49,11 +54,37 @@ func (m *MockSpyBoilerRepository) DeleteHaveBeenCalledWith(boilerId *string) boo
 }
 
 func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
+	m.LastUpdatedBoilerId = &boiler.Id
+	m.LastUpdatedBoilerName = &boiler.Name
+
 	return nil
 }
 
+func (m *MockSpyBoilerRepository) UpdateHaveBeenCalledWith(id, name string) bool {
+	var matchId bool = *m.LastUpdatedBoilerId == id
+	var matchName bool = *m.LastUpdatedBoilerName == name
+	var matchWithOneCall bool = m.LastOneBoilerId != nil && *m.LastOneBoilerId == id
+
+	m.LastUpdatedBoilerId = nil
+	m.LastUpdatedBoilerName = nil
+	m.LastOneBoilerId = nil
+
+	return matchId && matchName && matchWithOneCall
+}
+
 func (m *MockSpyBoilerRepository) One(id *domain.BoilerplateId) (*domain.Boilerplate, error) {
-	return domain.NewRandomBoilerplate(), nil
+	value := id.Value()
+	m.LastOneBoilerId = &value
+
+	return internal_test.NewRandomBoilerplateWithCustomId(id), nil
+}
+
+func (m *MockSpyBoilerRepository) OneHaveBeenCalledWith(boilerId *string) bool {
+	var result bool = m.LastOneBoilerId != nil && *m.LastOneBoilerId == *boilerId
+
+	m.LastOneBoilerId = nil
+
+	return result
 }
 
 var repository *MockSpyBoilerRepository

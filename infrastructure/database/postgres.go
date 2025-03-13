@@ -18,6 +18,11 @@ func (r *BoilerPostgresRepository) Create(boilerplate *domain.Boilerplate) error
 }
 
 func (r *BoilerPostgresRepository) Delete(id *domain.BoilerplateId) error {
+	_, err := r.One(id)
+	if err != nil {
+		return domain.BoilerplateNotFoundError
+	}
+
 	return r.db.Delete(&domain.Boilerplate{}, "id = ?", id.Value()).Error
 }
 

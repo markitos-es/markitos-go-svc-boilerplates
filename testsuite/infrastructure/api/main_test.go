@@ -9,6 +9,7 @@ import (
 	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
+	internal_test "github.com/markitos/markitos-svc-boilerplate/testsuite/internal"
 )
 
 var boilerplatesApiServer *api.Server
@@ -32,7 +33,7 @@ func RESTRouter() *gin.Engine {
 }
 
 func createPersistedRandomBoilerplate() *domain.Boilerplate {
-	var boiler *domain.Boilerplate = domain.NewRandomBoilerplate()
+	var boiler *domain.Boilerplate = internal_test.NewRandomBoilerplate()
 	testdb.GetRepository().Create(boiler)
 
 	return boiler

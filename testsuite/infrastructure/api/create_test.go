@@ -7,14 +7,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/internal/services"
+	internal_test "github.com/markitos/markitos-svc-boilerplate/testsuite/internal"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBoilerCreateHandler_Success(t *testing.T) {
+func TestBoilerplateCanCreate(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	boiler := domain.NewRandomBoilerplate()
+	boiler := internal_test.NewRandomOnlyNameBoilerplate()
 	requestBody, _ := json.Marshal(services.BoilerplateCreateRequest{
 		Name: boiler.Name,
 	})
@@ -31,4 +31,32 @@ func TestBoilerCreateHandler_Success(t *testing.T) {
 	assert.NotEmpty(t, responseId)
 
 	deletePersisteRandomBoilerplate(responseId)
+}
+
+func TestBoilerplateCantCreateWithoutName(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	requestBody, _ := json.Marshal(services.BoilerplateCreateRequest{})
+	request, _ := http.NewRequest(http.MethodPost, "/v1/boilerplates", bytes.NewBuffer(requestBody))
+	request.Header.Set("Content-Type", "application/json")
+
+	RESTRouter().ServeHTTP(recorder, request)
+
+	var response map[string]any
+	json.NewDecoder(recorder.Body).Decode(&response)
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
+}
+
+func TestBoilerplateCantCreateWithoutValidName(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	requestBody, _ := json.Marshal(services.BoilerplateCreateRequest{
+		Name: "!!!!!invalid!!!name!!!",
+	})
+	request, _ := http.NewRequest(http.MethodPost, "/v1/boilerplates", bytes.NewBuffer(requestBody))
+	request.Header.Set("Content-Type", "application/json")
+
+	RESTRouter().ServeHTTP(recorder, request)
+
+	var response map[string]any
+	json.NewDecoder(recorder.Body).Decode(&response)
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 }

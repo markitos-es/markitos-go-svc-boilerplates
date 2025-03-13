@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"github.com/markitos/markitos-svc-boilerplate/internal/services"
 )
 
@@ -35,7 +36,11 @@ func (s Server) delete(ctx *gin.Context) {
 	request := services.BoilerplateDeleteRequest{Id: *id}
 	var service services.BoilerplateDeleteService = services.NewBoilerplateDeleteService(s.repository)
 	if err := service.Do(request); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		var code int = http.StatusBadRequest
+		if errors.Is(err, domain.BoilerplateNotFoundError) {
+			code = http.StatusNotFound
+		}
+		ctx.JSON(code, errorResonses(err))
 		return
 	}
 

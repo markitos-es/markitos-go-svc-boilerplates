@@ -25,6 +25,9 @@ type BoilerplateName struct {
 	value string
 }
 
+const BOILERPLATE_NAME_MAX_LENGTH = 100
+const BOILERPLATE_NAME_MIN_LENGTH = 3
+
 func NewBoilerplateName(value string) (*BoilerplateName, error) {
 	if isValidBoilerplateName(value) {
 		return &BoilerplateName{value}, nil
@@ -34,8 +37,15 @@ func NewBoilerplateName(value string) (*BoilerplateName, error) {
 }
 
 func isValidBoilerplateName(value string) bool {
-	pattern := `^[a-zA-Z]{1}[a-zA-Z ]+[a-zA-Z]$|^[a-zA-Z]$`
-	matched, _ := regexp.MatchString(pattern, value)
+	if len(value) > BOILERPLATE_NAME_MAX_LENGTH || len(value) < BOILERPLATE_NAME_MIN_LENGTH {
+		return false
+	}
+
+	pattern := `^[a-zA-Z]{1}[a-zA-Z ]+[a-zA-Z]$|^[a-zA-Z]{1}$`
+	matched, err := regexp.MatchString(pattern, value)
+	if err != nil {
+		return false
+	}
 
 	return matched
 }
