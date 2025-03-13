@@ -65,6 +65,22 @@ func (s Server) one(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response.Data)
 }
 
+func (s *Server) update(ctx *gin.Context) {
+	request, shouldExitByError := createRequestOrExitWithError(ctx)
+	if shouldExitByError {
+		return
+	}
+
+	var service services.BoilerplateUpdateService = services.NewBoilerplateUpdateService(s.repository)
+	err := service.Do(request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nil)
+}
+
 func (s Server) getQueryParam(ctx *gin.Context, paramName string) (*string, error) {
 	response := ctx.Param(paramName)
 	if response == "" {
@@ -73,4 +89,32 @@ func (s Server) getQueryParam(ctx *gin.Context, paramName string) (*string, erro
 	}
 
 	return &response, nil
+}
+
+func createRequestOrExitWithError(ctx *gin.Context) (services.BoilerplateUpdateRequest, bool) {
+	var requestUri BoilerplateUpdateRequestUri
+	if err := ctx.ShouldBindUri(&requestUri); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return services.BoilerplateUpdateRequest{}, true
+	}
+	var requestBody BoilerplateUpdateRequestBody
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return services.BoilerplateUpdateRequest{}, true
+	}
+
+	var request services.BoilerplateUpdateRequest = services.BoilerplateUpdateRequest{
+		Id:   requestUri.Id,
+		Name: requestBody.Name,
+	}
+
+	return request, false
+}
+
+type BoilerplateUpdateRequestUri struct {
+	Id string `uri:"id" binding:"required,uuid"`
+}
+
+type BoilerplateUpdateRequestBody struct {
+	Name string `json:"name" binding:"required"`
 }
