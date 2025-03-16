@@ -33,7 +33,7 @@ func TestBoilerplateCantGetInvalidId(t *testing.T) {
 	request.Header.Set("Content-Type", "application/json")
 	RESTRouter().ServeHTTP(recorder, request)
 
-	assert.Equal(t, http.StatusNotFound, recorder.Code)
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 }
 
 func TestBoilerplateCantGetMissingId(t *testing.T) {

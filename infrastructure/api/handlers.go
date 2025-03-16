@@ -37,7 +37,7 @@ func (s Server) delete(ctx *gin.Context) {
 	var service services.BoilerplateDeleteService = services.NewBoilerplateDeleteService(s.repository)
 	if err := service.Do(request); err != nil {
 		var code int = http.StatusBadRequest
-		if errors.Is(err, domain.BoilerplateNotFoundError) {
+		if errors.Is(err, domain.ErrBoilerplateNotFound) {
 			code = http.StatusNotFound
 		}
 		ctx.JSON(code, errorResonses(err))
@@ -58,7 +58,11 @@ func (s Server) one(ctx *gin.Context) {
 	var service services.BoilerplateOneService = services.NewBoilerplateOneService(s.repository)
 	response, err := service.Do(request)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, errorResonses(err))
+		var code int = http.StatusBadRequest
+		if errors.Is(err, domain.ErrBoilerplateNotFound) {
+			code = http.StatusNotFound
+		}
+		ctx.JSON(code, errorResonses(err))
 		return
 	}
 
@@ -74,7 +78,7 @@ func (s *Server) update(ctx *gin.Context) {
 	var service services.BoilerplateUpdateService = services.NewBoilerplateUpdateService(s.repository)
 	if err := service.Do(request); err != nil {
 		var code int = http.StatusBadRequest
-		if errors.Is(err, domain.BoilerplateNotFoundError) {
+		if errors.Is(err, domain.ErrBoilerplateNotFound) {
 			code = http.StatusNotFound
 		}
 		ctx.JSON(code, errorResonses(err))

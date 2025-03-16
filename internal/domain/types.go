@@ -14,7 +14,7 @@ func NewBoilerplateId(value string) (*BoilerplateId, error) {
 		return &BoilerplateId{value}, nil
 	}
 
-	return nil, fmt.Errorf("invalid boilerplate id, must be an uuid v4, received: %s", value)
+	return nil, ErrBoilerplateBadRequest
 }
 
 func (b *BoilerplateId) Value() string {

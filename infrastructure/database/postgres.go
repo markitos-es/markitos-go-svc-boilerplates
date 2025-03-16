@@ -20,7 +20,7 @@ func (r *BoilerPostgresRepository) Create(boilerplate *domain.Boilerplate) error
 func (r *BoilerPostgresRepository) Delete(id *domain.BoilerplateId) error {
 	_, err := r.One(id)
 	if err != nil {
-		return domain.BoilerplateNotFoundError
+		return domain.ErrBoilerplateNotFound
 	}
 
 	return r.db.Delete(&domain.Boilerplate{}, "id = ?", id.Value()).Error
@@ -33,7 +33,7 @@ func (r *BoilerPostgresRepository) Update(boilerplate *domain.Boilerplate) error
 func (r *BoilerPostgresRepository) One(id *domain.BoilerplateId) (*domain.Boilerplate, error) {
 	var boiler domain.Boilerplate
 	if err := r.db.First(&boiler, "id = ?", id.Value()).Error; err != nil {
-		return nil, domain.BoilerplateNotFoundError
+		return nil, domain.ErrBoilerplateNotFound
 	}
 	return &boiler, nil
 }

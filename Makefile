@@ -14,3 +14,7 @@ security:
 	@SNYK_TOKEN=${SNYK_TOKEN} snyk code test
 	@echo "Running Gitleaks security analysis..."
 	@gitleaks detect .
+createdb:
+	bash bin/createdb.sh
+dropdb:
+	bash bin/dropdb.sh

@@ -9,8 +9,8 @@ echo "# |_|  |_|____/|_|\\_\\"
 echo "#                                   "
 echo "#  Creador: Marco Antonio - markitos      "
 echo "# ============================================="
-echo "#  🥷 (Cultura DevSecOps) 🗡️"
-echo "#  Mejor seguro que nunca. "
+echo "#  🥷 (mArKit0sDevSecOpsKit) 🗡️"
+echo "#  Markitos DevSecOps Kulture"
 echo "# ============================================="
 echo 
 # go to root of project

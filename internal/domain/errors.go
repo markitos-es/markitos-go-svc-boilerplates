@@ -2,4 +2,5 @@ package domain
 
 import "errors"
 
-var BoilerplateNotFoundError error = errors.New("Boilerplate not found")
+var ErrBoilerplateNotFound error = errors.New("boilerplate not found")
+var ErrBoilerplateBadRequest error = errors.New("bad request")

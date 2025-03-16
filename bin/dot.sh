@@ -9,27 +9,20 @@ echo "# |_|  |_|____/|_|\\_\\"
 echo "#                                   "
 echo "#  Creador: Marco Antonio - markitos      "
 echo "# ============================================="
-echo "#  🥷 (Cultura DevSecOps) 🗡️"
-echo "#  Mejor seguro que nunca. "
+echo "#  🥷 (mArKit0sDevSecOpsKit) 🗡️"
+echo "#  Markitos DevSecOps Kulture"
 echo "# ============================================="
 echo 
-# go to root of project
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR/../"
-
 set -euo pipefail
 IFS=$'\n\t'
-
 SCRIPT_NAME=$(basename "$0")
-LOG_FILE="/tmp/${SCRIPT_NAME%.sh}.log"
-
-# Funciones básicas
 function log_info() {
-    echo "[INFO] $*" | tee -a "$LOG_FILE"
+    echo "[INFO] $*"
 }
-
 function log_error() {
-    echo "[ERROR] $*" >&2 | tee -a "$LOG_FILE"
+    echo "[ERROR] $*" >&2
 }
 
 #:[.'.]:>-------------------------------------
