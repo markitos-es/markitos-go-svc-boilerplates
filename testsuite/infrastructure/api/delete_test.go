@@ -37,3 +37,12 @@ func TestBoilerplateCantDeleteValidButNonExistingId(t *testing.T) {
 
 	assert.Equal(t, http.StatusNotFound, recorder.Code)
 }
+
+func TestBoilerplateCantDeleteInvalidBoilerplateId(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	request, _ := http.NewRequest(http.MethodDelete, "/v1/boilerplates/an-invalid-id-format", nil)
+	request.Header.Set("Content-Type", "application/json")
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
+}

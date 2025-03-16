@@ -31,3 +31,29 @@ func TestCanUpdateABoilerplate(t *testing.T) {
 
 	deletePersisteRandomBoilerplate(boiler.Id)
 }
+
+func TestCantUpdateANonExistingBoilerplate(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	requestBody, _ := json.Marshal(services.BoilerplateUpdateRequest{
+		Name: domain.RandomPersonalName(),
+	})
+	request, _ := http.NewRequest(http.MethodPatch, "/v1/boilerplates/"+domain.UUIDv4(), bytes.NewBuffer(requestBody))
+	request.Header.Set("Content-Type", "application/json")
+
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusNotFound, recorder.Code)
+}
+
+func TestCantUpdateAnInvalidBoilerplateId(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	requestBody, _ := json.Marshal(services.BoilerplateUpdateRequest{
+		Name: domain.RandomPersonalName(),
+	})
+	request, _ := http.NewRequest(http.MethodPatch, "/v1/boilerplates/an-invalid-id-format", bytes.NewBuffer(requestBody))
+	request.Header.Set("Content-Type", "application/json")
+
+	RESTRouter().ServeHTTP(recorder, request)
+
+	assert.Equal(t, http.StatusBadRequest, recorder.Code)
+}

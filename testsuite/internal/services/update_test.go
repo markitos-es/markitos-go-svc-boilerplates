@@ -19,4 +19,5 @@ func TestCanUpdateABoiler(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.True(t, repository.UpdateHaveBeenCalledWith(request.Id, request.Name))
+	assert.True(t, repository.UpdateHaveBeenCalledOneWith(request.Id))
 }

@@ -9,18 +9,22 @@ import (
 )
 
 type MockSpyBoilerRepository struct {
-	LastCreatedBoilerName *string
-	LastDeleteBoilerId    *string
-	LastOneBoilerId       *string
-	LastUpdatedBoilerId   *string
-	LastUpdatedBoilerName *string
+	LastCreatedBoilerName     *string
+	LastDeleteBoilerId        *string
+	LastOneBoilerId           *string
+	LastUpdatedBoilerId       *string
+	LastUpdatedBoilerName     *string
+	LastOneForUpdatedBoilerId *string
 }
 
 func NewMockSpyBoilerRepository() *MockSpyBoilerRepository {
 	return &MockSpyBoilerRepository{
-		LastCreatedBoilerName: nil,
-		LastDeleteBoilerId:    nil,
-		LastOneBoilerId:       nil,
+		LastCreatedBoilerName:     nil,
+		LastDeleteBoilerId:        nil,
+		LastOneBoilerId:           nil,
+		LastUpdatedBoilerId:       nil,
+		LastUpdatedBoilerName:     nil,
+		LastOneForUpdatedBoilerId: nil,
 	}
 }
 
@@ -56,6 +60,7 @@ func (m *MockSpyBoilerRepository) DeleteHaveBeenCalledWith(boilerId *string) boo
 func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
 	m.LastUpdatedBoilerId = &boiler.Id
 	m.LastUpdatedBoilerName = &boiler.Name
+	m.LastOneForUpdatedBoilerId = &boiler.Id
 
 	return nil
 }
@@ -63,13 +68,19 @@ func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
 func (m *MockSpyBoilerRepository) UpdateHaveBeenCalledWith(id, name string) bool {
 	var matchId bool = *m.LastUpdatedBoilerId == id
 	var matchName bool = *m.LastUpdatedBoilerName == name
-	var matchWithOneCall bool = m.LastOneBoilerId != nil && *m.LastOneBoilerId == id
 
 	m.LastUpdatedBoilerId = nil
 	m.LastUpdatedBoilerName = nil
-	m.LastOneBoilerId = nil
 
-	return matchId && matchName && matchWithOneCall
+	return matchId && matchName
+}
+
+func (m *MockSpyBoilerRepository) UpdateHaveBeenCalledOneWith(id string) bool {
+	var matchId bool = *m.LastOneForUpdatedBoilerId == id
+
+	m.LastOneForUpdatedBoilerId = nil
+
+	return matchId
 }
 
 func (m *MockSpyBoilerRepository) One(id *domain.BoilerplateId) (*domain.Boilerplate, error) {

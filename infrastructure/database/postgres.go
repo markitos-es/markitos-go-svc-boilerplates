@@ -1,8 +1,6 @@
 package database
 
 import (
-	"fmt"
-
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"gorm.io/gorm"
 )
@@ -35,7 +33,7 @@ func (r *BoilerPostgresRepository) Update(boilerplate *domain.Boilerplate) error
 func (r *BoilerPostgresRepository) One(id *domain.BoilerplateId) (*domain.Boilerplate, error) {
 	var boiler domain.Boilerplate
 	if err := r.db.First(&boiler, "id = ?", id.Value()).Error; err != nil {
-		return nil, fmt.Errorf("could not find boilerplate with id %s: %w", id.Value(), err)
+		return nil, domain.BoilerplateNotFoundError
 	}
 	return &boiler, nil
 }

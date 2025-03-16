@@ -72,9 +72,12 @@ func (s *Server) update(ctx *gin.Context) {
 	}
 
 	var service services.BoilerplateUpdateService = services.NewBoilerplateUpdateService(s.repository)
-	err := service.Do(request)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+	if err := service.Do(request); err != nil {
+		var code int = http.StatusBadRequest
+		if errors.Is(err, domain.BoilerplateNotFoundError) {
+			code = http.StatusNotFound
+		}
+		ctx.JSON(code, errorResonses(err))
 		return
 	}
 
