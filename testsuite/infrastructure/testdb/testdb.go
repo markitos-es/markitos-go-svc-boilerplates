@@ -30,11 +30,6 @@ func GetDB() *gorm.DB {
 			log.Fatalf("Failed to connect to database: %v", err)
 		}
 
-		err = db.AutoMigrate(&domain.Boilerplate{})
-		if err != nil {
-			log.Fatalf("Failed to migrate database: %v", err)
-		}
-
 		dbInstance = db
 	})
 
@@ -49,4 +44,9 @@ func GetRepository() domain.BoilerplateRepository {
 	})
 
 	return repoInstance
+}
+
+func init() {
+	GetRepository()
+	GetDB().AutoMigrate(&domain.Boilerplate{})
 }
