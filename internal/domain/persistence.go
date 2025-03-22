@@ -5,4 +5,5 @@ type BoilerplateRepository interface {
 	Delete(id *BoilerplateId) error
 	One(id *BoilerplateId) (*Boilerplate, error)
 	Update(boilerplate *Boilerplate) error
+	All() ([]*Boilerplate, error)
 }

@@ -3,8 +3,8 @@ package services
 import "github.com/markitos/markitos-svc-boilerplate/internal/domain"
 
 type BoilerplateUpdateRequest struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+	Id   string `json:"id" binding:"required"`
+	Name string `json:"name" binding:"required"`
 }
 
 type BoilerplateUpdateService struct {
@@ -18,17 +18,21 @@ func NewBoilerplateUpdateService(repository domain.BoilerplateRepository) Boiler
 }
 
 func (s BoilerplateUpdateService) Do(request BoilerplateUpdateRequest) error {
-	boilerId, err := domain.NewBoilerplateId(request.Id)
+	securedId, err := domain.NewBoilerplateId(request.Id)
+	if err != nil {
+		return err
+	}
+	securedName, err := domain.NewBoilerplateName(request.Name)
 	if err != nil {
 		return err
 	}
 
-	boiler, err := s.Repository.One(boilerId)
+	boiler, err := s.Repository.One(securedId)
 	if err != nil {
 		return err
 	}
 
-	boiler.Name = request.Name
+	boiler.Name = securedName.Value()
 
 	return s.Repository.Update(boiler)
 }

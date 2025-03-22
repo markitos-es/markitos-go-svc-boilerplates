@@ -98,6 +98,10 @@ func (m *MockSpyBoilerRepository) OneHaveBeenCalledWith(boilerId *string) bool {
 	return result
 }
 
+func (m *MockSpyBoilerRepository) All() ([]*domain.Boilerplate, error) {
+	return nil, nil
+}
+
 var repository *MockSpyBoilerRepository
 
 func TestMain(m *testing.M) {

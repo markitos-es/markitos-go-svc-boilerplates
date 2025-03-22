@@ -1,34 +1,3 @@
-<p align="center">
-    <img alt="Goenv Logo" src="/static/logo.png?v=1.18.0" width="200" />
-    <h3 align="center">Goenv</h3>
-    <p align="center">Manage Your Applications Go Environment</p>
-    <p align="center">
-        <a href="https://github.com/clivern/Goenv/actions/workflows/build.yml">
-            <img src="https://github.com/clivern/Goenv/actions/workflows/build.yml/badge.svg">
-        </a>
-        <a href="https://github.com/clivern/Goenv/releases">
-            <img src="https://img.shields.io/badge/Version-v1.18.0-red.svg">
-        </a>
-        <a href="https://goreportcard.com/report/github.com/clivern/Goenv">
-            <img src="https://goreportcard.com/badge/github.com/clivern/Goenv?v=1.18.0">
-        </a>
-        <a href="https://godoc.org/github.com/clivern/goenv">
-            <img src="https://godoc.org/github.com/clivern/goenv?status.svg">
-        </a>
-        <a href="https://github.com/clivern/Goenv/blob/main/LICENSE">
-            <img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg">
-        </a>
-    </p>
-</p>
-<br/>
-<p align="center">
-    <a href="https://www.youtube.com/watch?v=nC344VXoFs4" target="_blank">
-        <img src="/static/screenshot-1.png" width="95%" />
-    </a>
-</p>
-
-Goenv helps you to work with multiple `golang` versions at the same time whether on mac or linux operating system. It supports both global and per-application version configuration.
-
 
 ## Usage
 

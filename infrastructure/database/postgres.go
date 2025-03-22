@@ -37,3 +37,12 @@ func (r *BoilerPostgresRepository) One(id *domain.BoilerplateId) (*domain.Boiler
 	}
 	return &boiler, nil
 }
+
+func (r *BoilerPostgresRepository) All() ([]*domain.Boilerplate, error) {
+	var boilers []*domain.Boilerplate
+	if err := r.db.Find(&boilers).Error; err != nil {
+		return nil, domain.ErrBoilerplateBadRequest
+	}
+
+	return boilers, nil
+}

@@ -33,7 +33,7 @@ func (s BoilerplateCreateService) Do(request BoilerplateCreateRequest) (*Boilerp
 	}
 
 	return &BoilerplateCreateResponse{
-		Id:   id,
-		Name: request.Name,
+		Id:   boiler.Id,
+		Name: boiler.Name,
 	}, nil
 }

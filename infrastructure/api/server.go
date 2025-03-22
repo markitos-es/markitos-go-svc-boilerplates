@@ -35,6 +35,7 @@ func (s *Server) createRouter() {
 	s.router.PATCH("/v1/boilerplates/:id", s.update)
 	s.router.DELETE("/v1/boilerplates/:id", s.delete)
 	s.router.GET("/v1/boilerplates/:id", s.one)
+	s.router.GET("/v1/boilerplates/all", s.all)
 }
 
 func (s *Server) Run() error {

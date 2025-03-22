@@ -49,3 +49,7 @@ func isValidBoilerplateName(value string) bool {
 
 	return matched
 }
+
+func (b *BoilerplateName) Value() string {
+	return b.value
+}

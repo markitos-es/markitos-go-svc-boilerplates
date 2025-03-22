@@ -47,6 +47,17 @@ func (s Server) delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, nil)
 }
 
+func (s Server) all(ctx *gin.Context) {
+	var service services.BoilerplateAllService = services.NewBoilerplateAllService(s.repository)
+	response, err := service.Do()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonses(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response.Data)
+}
+
 func (s Server) one(ctx *gin.Context) {
 	id, err := s.getQueryParam(ctx, "id")
 	if err != nil {

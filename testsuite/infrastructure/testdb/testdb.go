@@ -31,6 +31,7 @@ func GetDB() *gorm.DB {
 		}
 
 		dbInstance = db
+		dbInstance.AutoMigrate(&domain.Boilerplate{})
 	})
 
 	return dbInstance
@@ -44,9 +45,4 @@ func GetRepository() domain.BoilerplateRepository {
 	})
 
 	return repoInstance
-}
-
-func init() {
-	GetRepository()
-	GetDB().AutoMigrate(&domain.Boilerplate{})
 }
