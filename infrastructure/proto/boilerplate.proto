@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package boilerplate;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/markitos-es/markitos-svc-boilerplates/gapi";
+
+message Boilerplate {
+  string id = 1;
+  string name = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+service BoilerplateService {
+  rpc CreateBoilerplate(CreateBoilerplateRequest) returns (CreateBoilerplateResponse);
+  rpc GetBoilerplate(GetBoilerplateRequest) returns (GetBoilerplateResponse);
+  rpc UpdateBoilerplate(UpdateBoilerplateRequest) returns (UpdateBoilerplateResponse);
+  rpc DeleteBoilerplate(DeleteBoilerplateRequest) returns (DeleteBoilerplateResponse);
+  rpc ListBoilerplates(ListBoilerplatesRequest) returns (ListBoilerplatesResponse);
+  rpc SearchBoilerplates(SearchBoilerplatesRequest) returns (SearchBoilerplatesResponse);
+}
+
+message CreateBoilerplateRequest {
+  string name = 1;
+}
+
+message CreateBoilerplateResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message GetBoilerplateRequest {
+  string id = 1;
+}
+
+message GetBoilerplateResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message UpdateBoilerplateRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message UpdateBoilerplateResponse {}
+
+message DeleteBoilerplateRequest {
+  string id = 1;
+}
+
+message DeleteBoilerplateResponse {}
+
+message ListBoilerplatesRequest {}
+
+message ListBoilerplatesResponse {
+  repeated Boilerplate boilerplates = 1;
+}
+
+message SearchBoilerplatesRequest {
+  string search_term = 1;
+  int32 page_number = 2;
+  int32 page_size = 3;
+}
+
+message SearchBoilerplatesResponse {
+  repeated Boilerplate boilerplates = 1;
+  int32 total_results = 2;
+}

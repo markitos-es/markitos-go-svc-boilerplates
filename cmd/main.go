@@ -2,11 +2,15 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/api"
 	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/configuration"
 	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/gapi"
 	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,15 +26,17 @@ func main() {
 	config = loadConfiguration()
 	log.Println("['.']:>------- configuration loaded")
 
-	repository = loadDatabase()
+	loadDatabase()
 	log.Println("['.']:>------- database ok")
 
-	server := createServer()
-	log.Println("['.']:>------- server created and running at: ", config.ServerAddress)
+	// log.Println("['.']:>------- server REST created and running at: ", config.ServerAddress)
+	// runRESTServer()
+
+	log.Println("['.']:>------- server GRPC created and running at: ", config.GRPCServerAddress)
+	runGRPCServer()
 	log.Println("['.']:>--------------------------------------------")
-	if err := server.Run(); err != nil {
-		log.Fatal("['.']:>------- unable to start server: ", err)
-	}
+	log.Println("['.']:>--- <markitos-svc-boilerplates started>  ---")
+	log.Println("['.']:>")
 }
 
 func loadConfiguration() configuration.BoilerplateConfiguration {
@@ -42,11 +48,32 @@ func loadConfiguration() configuration.BoilerplateConfiguration {
 	return config
 }
 
-func createServer() *api.Server {
-	return api.NewServer(config.ServerAddress, repository)
+func runGRPCServer() {
+	grpcServer := grpc.NewServer()
+	server := gapi.NewServer(config.ServerAddress, repository)
+
+	gapi.RegisterBoilerplateServiceServer(grpcServer, server)
+	reflection.Register(grpcServer)
+
+	listener, err := net.Listen("tcp", config.GRPCServerAddress)
+	if err != nil {
+		log.Fatal("['.']:> error unable to listen to GRPC server:", err)
+	}
+
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		log.Fatal("['.']:> error unable to serve GRPC server:", err)
+	}
 }
 
-func loadDatabase() domain.BoilerplateRepository {
+func runRESTServer() {
+	server := api.NewServer(config.ServerAddress, repository)
+	if err := server.Run(); err != nil {
+		log.Fatal("['.']:> error unable to start server:", err)
+	}
+}
+
+func loadDatabase() {
 	db, err := gorm.Open(postgres.Open(config.DatabaseDsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("['.']:> error unable to connect to database:", err)
@@ -58,5 +85,5 @@ func loadDatabase() domain.BoilerplateRepository {
 
 	repo := database.NewBoilerPostgresRepository(db)
 
-	return &repo
+	repository = &repo
 }

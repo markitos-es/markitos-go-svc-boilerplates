@@ -5,8 +5,9 @@ import (
 )
 
 type BoilerplateConfiguration struct {
-	DatabaseDsn   string `mapstructure:"DATABASE_DSN"`
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	DatabaseDsn       string `mapstructure:"DATABASE_DSN"`
+	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
+	GRPCServerAddress string `mapstructure:"GRPC_SERVER_ADDRESS"`
 }
 
 func LoadConfiguration(

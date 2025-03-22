@@ -24,3 +24,5 @@ install-grpc-tools:
 	bash bin/install-grpc-tools.sh
 certificate:
 	bash bin/github-ssh-key.sh $(name) $(email)
+proto:
+	bash bin/proto.sh
