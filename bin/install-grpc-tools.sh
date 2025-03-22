@@ -35,7 +35,7 @@ function log_success() {
 }
 
 #:[.'.]:> Mostrar lo que hará el script
-echo -e "\033[1;36m🛠️ Este script instalará las siguientes herramientas:\033[0m"
+echo -e "\033[1;36m🛠️ Este script instalará las siguientes herramientas en ~/.local/bin:\033[0m"
 echo -e "  - \033[1;33mprotoc\033[0m (Protocol Buffers Compiler)"
 echo -e "  - \033[1;33mPlugins de Go para gRPC\033[0m"
 echo
@@ -47,39 +47,42 @@ echo
 echo -e "\033[1;33m⚠️ Presiona CTRL+C para cancelar o ENTER para continuar...\033[0m"
 read -r
 
-#:[.'.]:> Instalar protoc (ultima version marzo 2025)
+#:[.'.]:> Crear directorio ~/.local/bin si no existe
+mkdir -p ~/.local/bin
+
+#:[.'.]:> Instalar protoc
 PROTOC_VERSION=30.1
 log_info "Descargando e instalando protoc (versión ${PROTOC_VERSION})..."
 cd /tmp
 curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
 sudo apt install unzip -y
 unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc
-sudo mv protoc/bin/protoc /usr/local/bin/
-sudo mv protoc/include/* /usr/local/include/
+mv protoc/bin/protoc ~/.local/bin/protoc
+mv protoc/include/* ~/.local/include/
 rm -rf protoc protoc-${PROTOC_VERSION}-linux-x86_64.zip
-log_success "protoc instalado correctamente. Versión: $(protoc --version)"
+log_success "protoc instalado correctamente. Versión: $(~/.local/bin/protoc --version)"
 
 #:[.'.]:> Instalar plugins de Go para gRPC
 log_info "Instalando plugins de Go para gRPC..."
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+GOBIN=~/.local/bin go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+GOBIN=~/.local/bin go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 log_success "Plugins de Go para gRPC instalados correctamente."
 
 #:[.'.]:> Actualizar PATH en ~/.bashrc
-if ! echo "$PATH" | grep -q "$(go env GOPATH)/bin"; then
+if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
     log_info "Actualizando PATH en ~/.bashrc..."
-    echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.bashrc
+    echo 'export PATH=${PATH}:${HOME}/.local/bin' >> ~/.bashrc
     source ~/.bashrc
     log_success "PATH actualizado correctamente."
 else
-    log_info "El PATH ya incluye $(go env GOPATH)/bin."
+    log_info "El PATH ya incluye ~/.local/bin."
 fi
 
 #:[.'.]:> Verificar instalación
 log_info "Verificando las herramientas instaladas..."
-PROTOC_VERSION_INSTALLED=$(protoc --version 2>/dev/null || echo "No instalado")
-PROTOC_GEN_GO_VERSION=$(protoc-gen-go --version 2>/dev/null || echo "No instalado")
-PROTOC_GEN_GO_GRPC_VERSION=$(protoc-gen-go-grpc --version 2>/dev/null || echo "No instalado")
+PROTOC_VERSION_INSTALLED=$(~/.local/bin/protoc --version 2>/dev/null || echo "No instalado")
+PROTOC_GEN_GO_VERSION=$(~/.local/bin/protoc-gen-go --version 2>/dev/null || echo "No instalado")
+PROTOC_GEN_GO_GRPC_VERSION=$(~/.local/bin/protoc-gen-go-grpc --version 2>/dev/null || echo "No instalado")
 
 #:[.'.]:> Mostrar informe final
 echo
