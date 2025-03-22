@@ -20,5 +20,7 @@ dropdb:
 	bash bin/dropdb.sh
 install-appsec-tools:
 	bash bin/install-appsec-tools.sh
+install-grpc-tools:
+	bash bin/install-grpc-tools.sh
 certificate:
 	bash bin/github-ssh-key.sh $(name) $(email)

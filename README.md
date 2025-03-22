@@ -119,4 +119,20 @@ source ~/.bashrc
 
 ---
 
+## Instalación de Herramientas Adicionales
+
+### **Instalación de gRPC Tools**
+El script `install-grpc-tools.sh` permite instalar herramientas necesarias para trabajar con gRPC.
+
+- **Instalación**:
+  ```bash
+  make install-grpc-tools
+  ```
+  Esto instalará las herramientas de gRPC, como `protoc` y sus plugins, necesarias para generar código a partir de archivos `.proto`.
+
+- **Uso**:
+  Una vez instaladas, puedes generar código cliente y servidor para gRPC utilizando los comandos de `protoc`.
+
+---
+
 Con estas herramientas y configuraciones, puedes garantizar un desarrollo seguro y seguir las mejores prácticas de DevSecOps. ¡Asegúrate de integrarlas en tu flujo de trabajo! 🚀
