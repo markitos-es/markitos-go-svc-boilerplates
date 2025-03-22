@@ -44,7 +44,7 @@ func (s Server) delete(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, nil)
+	ctx.JSON(http.StatusOK, gin.H{"deleted": request.Id})
 }
 
 func (s Server) all(ctx *gin.Context) {
@@ -96,7 +96,7 @@ func (s *Server) update(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, nil)
+	ctx.JSON(http.StatusOK, gin.H{"updated": request.Id})
 }
 
 func (s *Server) search(ctx *gin.Context) {

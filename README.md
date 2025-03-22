@@ -1,168 +1,122 @@
+# Seguridad en el Desarrollo 🛡️
 
-## Usage
+Este proyecto incluye herramientas y scripts para garantizar la seguridad en el desarrollo siguiendo las mejores prácticas de DevSecOps. A continuación, se describen las herramientas disponibles, cómo utilizarlas y cómo integrarlas en tu flujo de trabajo.
 
-Download [the latest `goenv` binary](https://github.com/clivern/Goenv/releases). Make it executable from everywhere.
+---
 
-```zsh
-$ export GOENV_LATEST_VERSION=$(curl --silent "https://api.github.com/repos/clivern/Goenv/releases/latest" | jq '.tag_name' | sed -E 's/.*"([^"]+)".*/\1/' | tr -d v)
+## Índice 📚
 
-# For Linux
-$ curl -sL https://github.com/clivern/Goenv/releases/download/v{$GOENV_LATEST_VERSION}/goenv_Linux_x86_64.tar.gz | tar xz
+1. [Herramientas de Seguridad Incluidas 🔒](#herramientas-de-seguridad-incluidas-)
+  - [Snyk CLI](#1-snyk-cli)
+  - [Gitleaks](#2-gitleaks)
+  - [Generación de Claves SSH](#3-generación-de-claves-ssh)
+2. [Ejecución de Seguridad con Makefile ⚙️](#ejecución-de-seguridad-con-makefile-️)
+  - [Análisis de Seguridad](#1-análisis-de-seguridad)
+  - [Generación de Certificados SSH](#2-generación-de-certificados-ssh)
+3. [Ejemplo de Flujo de Seguridad 🛠️](#ejemplo-de-flujo-de-seguridad-️)
+4. [Configuración Adicional](#configuración-adicional)
 
-# For Mac (Arm M chips)
-$ curl -sL https://github.com/clivern/Goenv/releases/download/v{$GOENV_LATEST_VERSION}/goenv_Darwin_arm64.tar.gz | tar xz
+---
 
+## Herramientas de Seguridad Incluidas 🔒
 
-# For Mac (Intel)
-$ curl -sL https://github.com/clivern/Goenv/releases/download/v{$GOENV_LATEST_VERSION}/goenv_Darwin_x86_64.tar.gz | tar xz
+### 1. **Snyk CLI**
+Snyk es una herramienta que analiza el código fuente y las dependencias en busca de vulnerabilidades de seguridad.
+
+- **Instalación**: Usa el script `install-appsec-tools.sh` para instalar Snyk CLI.
+- **Uso**:
+  ```bash
+  make security
+  ```
+  Esto ejecutará un análisis de seguridad del código fuente utilizando Snyk.
+
+### 2. **Gitleaks**
+Gitleaks es una herramienta para detectar secretos y credenciales expuestos en el repositorio.
+
+- **Instalación**: Usa el script `install-appsec-tools.sh` para instalar Gitleaks.
+- **Uso**:
+  ```bash
+  make security
+  ```
+  Esto ejecutará un análisis de seguridad en busca de secretos expuestos utilizando Gitleaks.
+
+### 3. **Generación de Claves SSH**
+Puedes generar claves SSH para autenticarte con GitHub u otros servicios de forma segura.
+
+- **Uso**:
+  ```bash
+  make certificate name=<nombre-de-la-clave> email=<tu-email>
+  ```
+  Ejemplo:
+  ```bash
+  make certificate name=github-key email=tuemail@example.com
+  ```
+  Esto generará una clave SSH en el directorio `~/.ssh` con el nombre especificado y mostrará la clave pública para que puedas añadirla a tu cuenta de GitHub.
+
+---
+
+## Ejecución de Seguridad con Makefile ⚙️
+
+El archivo Makefile incluye comandos para ejecutar las herramientas de seguridad y generar certificados SSH. A continuación, se describen los comandos disponibles:
+
+### 1. **Análisis de Seguridad**
+Ejecuta un análisis de seguridad completo utilizando Snyk y Gitleaks.
+
+```bash
+make security
 ```
 
-Configure the goenv using the following command
+### 2. **Generación de Certificados SSH**
+Genera una clave SSH para autenticarte con servicios como GitHub.
 
-```zsh
-$ goenv config
+```bash
+make certificate name=<nombre-de-la-clave> email=<tu-email>
 ```
 
-Add `goenv` shims to `PATH` using the following command. also append it to `~/.profile` file to make it permanent.
-
-```zsh
-$ export PATH="$HOME/.goenv/shims:"$PATH
-
-# OR
-
-$ eval "$(goenv init)"
+Ejemplo:
+```bash
+make certificate name=github-key email=tuemail@example.com
 ```
 
-Install a new `go` version `1.18` and set as a global
+Esto generará una clave SSH en el directorio `~/.ssh` con el nombre especificado y mostrará la clave pública.
 
-```zsh
-$ goenv install 1.18
-$ goenv global 1.18
+---
+
+## Ejemplo de Flujo de Seguridad 🛠️
+
+1. **Instalar herramientas de seguridad**:
+  ```bash
+  make install-appsec-tools
+  ```
+
+2. **Ejecutar análisis de seguridad**:
+  ```bash
+  make security
+  ```
+
+3. **Generar una clave SSH para GitHub**:
+  ```bash
+  make certificate name=github-key email=tuemail@example.com
+  ```
+
+4. **Añadir la clave pública a tu cuenta de GitHub**:
+  Copia la clave pública generada (mostrada en la terminal) y añádela a tu cuenta de GitHub en la sección **SSH and GPG keys**.
+
+---
+
+## Configuración Adicional
+
+### Variables de Entorno
+El script `install-appsec-tools.sh` configura automáticamente las siguientes variables de entorno en tu archivo `~/.bashrc`:
+
+- **`PATH`**: Incluye el directorio `~/.local/bin` donde se instalan las herramientas.
+- **`SNYK_TOKEN`**: Token de autenticación para Snyk CLI. Si no se proporciona, se configura con el valor `replace_me`.
+
+Para asegurarte de que las variables están configuradas correctamente, ejecuta:
+```bash
+source ~/.bashrc
 ```
 
-To configure a local version different from the global
+---
 
-```zsh
-$ goenv local 1.18
-```
-
-To Uninstall a version
-
-```zsh
-$ goenv uninstall 1.18
-```
-
-Show the used version either from current directory or parent directories or the global version.
-
-```zsh
-$ goenv version
-```
-
-To list all installed versions
-
-```zsh
-$ goenv versions
-```
-
-for a list of all available commands
-
-```zsh
-$ goenv --help
-
-🐺 Manage Your Applications Go Environment.
-
-If you have any suggestions, bug reports, or annoyances please report
-them to our issue tracker at <https://github.com/clivern/goenv/issues>
-
-Usage:
-  goenv [command]
-
-Available Commands:
-  completion  Generate the autocompletion script for the specified shell
-  config      Configure the goenv application.
-  exec        Show the current go version.
-  global      Set or show the global go version.
-  help        Help about any command
-  info        Print the goenv version
-  init        Init the import path for goenv shims.
-  install     Install a go version.
-  license     Print the license
-  local       Set or show the local application-specific go version.
-  rehash      Refresh binaries under goenv shim directory.
-  satisfy     Satisfy the current directry go version.
-  uninstall   Uninstall a specific go version.
-  version     Show the current go version.
-  versions    List installed go versions.
-
-Flags:
-  -h, --help   help for goenv
-
-Use "goenv [command] --help" for more information about a command.
-```
-
-
-## Under The Hood
-
-Goenv is inspired by and works like `rbenv`. At a high level, `goenv` intercepts `Go` commands using `shim` executables injected into your `PATH`, determines which Go version has been specified by your application or globally, and passes your commands to the correct `Go` installation `bin` folder.
-
-**Understanding PATH**
-
-When you run a command like `go` or `gofmt`, your operating system searches through a list of directories to find an executable file with that name. This list of directories lives in an environment variable called `PATH`, with each directory in the list separated by a colon:
-
-```
-/usr/local/bin:/usr/bin:/bin
-```
-
-Directories in `PATH` are searched from left to right, so a matching executable in a directory at the beginning of the list takes precedence over another one at the end. In this example, the `/usr/local/bin` directory will be searched first, then `/usr/bin`, then `/bin`.
-
-**Understanding Shims**
-
-`goenv` works by inserting a directory of shims at the front of your `PATH`:
-
-```zsh
-~/.goenv/shims:/usr/local/bin:/usr/bin:/bin
-```
-
-Through a process called rehashing, `goenv` maintains shims in that directory to match every `Go` command across every installed version of `go` like `gofmt` and so on.
-
-`shims` are lightweight executables that simply pass your command to the right binary under the current go version, your operating system will do the following:
-
-1. Search your `PATH` for an executable file named `gofmt`.
-2. Find the goenv shim named `gofmt` at the beginning of your `PATH`
-3. Run the shim named `gofmt`, which in turn fetch the target go version and use the `gofmt` inside `go/bin` directory.
-
-**Choosing the Go Version**
-
-When you execute a shim, `goenv` determines which Go version to use by reading it from the following sources, in this order:
-
-1. The first `.go-version `file found by searching the current working directory and each of its parent directories until reaching the root of your filesystem. You can modify the `.go-version` file in the current working directory with the `goenv local x.x.x` command.
-2. The global `$HOME/.goenv/.go-version` file. You can modify this file using the `goenv global x.x.x` command.
-
-
-## Versioning
-
-For transparency into our release cycle and in striving to maintain backward compatibility, Goenv is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.
-
-See the [Releases section of our GitHub project](https://github.com/clivern/goenv/releases) for changelogs for each release version of Goenv. It contains summaries of the most noteworthy changes made in each release. Also see the [Milestones section](https://github.com/clivern/goenv/milestones) for the future roadmap.
-
-
-## Bug tracker
-
-If you have any suggestions, bug reports, or annoyances please report them to our issue tracker at https://github.com/clivern/goenv/issues
-
-
-## Security Issues
-
-If you discover a security vulnerability within Goenv, please send an email to [hello@clivern.com](mailto:hello@clivern.com)
-
-
-## Contributing
-
-We are an open source, community-driven project so please feel free to join us. see the [contributing guidelines](CONTRIBUTING.md) for more details.
-
-
-## License
-
-© 2022, Clivern. Released under [MIT License](https://opensource.org/licenses/mit-license.php).
-
-**Goenv** is authored and maintained by [@clivern](http://github.com/clivern).
+Con estas herramientas y configuraciones, puedes garantizar un desarrollo seguro y seguir las mejores prácticas de DevSecOps. ¡Asegúrate de integrarlas en tu flujo de trabajo! 🚀
