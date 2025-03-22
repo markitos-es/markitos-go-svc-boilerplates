@@ -19,8 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BoilerplateService_CreateBoilerplate_FullMethodName = "/boilerplate.BoilerplateService/CreateBoilerplate"
-	BoilerplateService_GetBoilerplate_FullMethodName    = "/boilerplate.BoilerplateService/GetBoilerplate"
+	BoilerplateService_CreateBoilerplate_FullMethodName  = "/boilerplate.BoilerplateService/CreateBoilerplate"
+	BoilerplateService_GetBoilerplate_FullMethodName     = "/boilerplate.BoilerplateService/GetBoilerplate"
+	BoilerplateService_UpdateBoilerplate_FullMethodName  = "/boilerplate.BoilerplateService/UpdateBoilerplate"
+	BoilerplateService_DeleteBoilerplate_FullMethodName  = "/boilerplate.BoilerplateService/DeleteBoilerplate"
+	BoilerplateService_ListBoilerplates_FullMethodName   = "/boilerplate.BoilerplateService/ListBoilerplates"
+	BoilerplateService_SearchBoilerplates_FullMethodName = "/boilerplate.BoilerplateService/SearchBoilerplates"
 )
 
 // BoilerplateServiceClient is the client API for BoilerplateService service.
@@ -29,6 +33,10 @@ const (
 type BoilerplateServiceClient interface {
 	CreateBoilerplate(ctx context.Context, in *CreateBoilerplateRequest, opts ...grpc.CallOption) (*CreateBoilerplateResponse, error)
 	GetBoilerplate(ctx context.Context, in *GetBoilerplateRequest, opts ...grpc.CallOption) (*GetBoilerplateResponse, error)
+	UpdateBoilerplate(ctx context.Context, in *UpdateBoilerplateRequest, opts ...grpc.CallOption) (*UpdateBoilerplateResponse, error)
+	DeleteBoilerplate(ctx context.Context, in *DeleteBoilerplateRequest, opts ...grpc.CallOption) (*DeleteBoilerplateResponse, error)
+	ListBoilerplates(ctx context.Context, in *ListBoilerplatesRequest, opts ...grpc.CallOption) (*ListBoilerplatesResponse, error)
+	SearchBoilerplates(ctx context.Context, in *SearchBoilerplatesRequest, opts ...grpc.CallOption) (*SearchBoilerplatesResponse, error)
 }
 
 type boilerplateServiceClient struct {
@@ -59,12 +67,56 @@ func (c *boilerplateServiceClient) GetBoilerplate(ctx context.Context, in *GetBo
 	return out, nil
 }
 
+func (c *boilerplateServiceClient) UpdateBoilerplate(ctx context.Context, in *UpdateBoilerplateRequest, opts ...grpc.CallOption) (*UpdateBoilerplateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateBoilerplateResponse)
+	err := c.cc.Invoke(ctx, BoilerplateService_UpdateBoilerplate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *boilerplateServiceClient) DeleteBoilerplate(ctx context.Context, in *DeleteBoilerplateRequest, opts ...grpc.CallOption) (*DeleteBoilerplateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteBoilerplateResponse)
+	err := c.cc.Invoke(ctx, BoilerplateService_DeleteBoilerplate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *boilerplateServiceClient) ListBoilerplates(ctx context.Context, in *ListBoilerplatesRequest, opts ...grpc.CallOption) (*ListBoilerplatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListBoilerplatesResponse)
+	err := c.cc.Invoke(ctx, BoilerplateService_ListBoilerplates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *boilerplateServiceClient) SearchBoilerplates(ctx context.Context, in *SearchBoilerplatesRequest, opts ...grpc.CallOption) (*SearchBoilerplatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchBoilerplatesResponse)
+	err := c.cc.Invoke(ctx, BoilerplateService_SearchBoilerplates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BoilerplateServiceServer is the server API for BoilerplateService service.
 // All implementations must embed UnimplementedBoilerplateServiceServer
 // for forward compatibility.
 type BoilerplateServiceServer interface {
 	CreateBoilerplate(context.Context, *CreateBoilerplateRequest) (*CreateBoilerplateResponse, error)
 	GetBoilerplate(context.Context, *GetBoilerplateRequest) (*GetBoilerplateResponse, error)
+	UpdateBoilerplate(context.Context, *UpdateBoilerplateRequest) (*UpdateBoilerplateResponse, error)
+	DeleteBoilerplate(context.Context, *DeleteBoilerplateRequest) (*DeleteBoilerplateResponse, error)
+	ListBoilerplates(context.Context, *ListBoilerplatesRequest) (*ListBoilerplatesResponse, error)
+	SearchBoilerplates(context.Context, *SearchBoilerplatesRequest) (*SearchBoilerplatesResponse, error)
 	mustEmbedUnimplementedBoilerplateServiceServer()
 }
 
@@ -80,6 +132,18 @@ func (UnimplementedBoilerplateServiceServer) CreateBoilerplate(context.Context, 
 }
 func (UnimplementedBoilerplateServiceServer) GetBoilerplate(context.Context, *GetBoilerplateRequest) (*GetBoilerplateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBoilerplate not implemented")
+}
+func (UnimplementedBoilerplateServiceServer) UpdateBoilerplate(context.Context, *UpdateBoilerplateRequest) (*UpdateBoilerplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBoilerplate not implemented")
+}
+func (UnimplementedBoilerplateServiceServer) DeleteBoilerplate(context.Context, *DeleteBoilerplateRequest) (*DeleteBoilerplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBoilerplate not implemented")
+}
+func (UnimplementedBoilerplateServiceServer) ListBoilerplates(context.Context, *ListBoilerplatesRequest) (*ListBoilerplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListBoilerplates not implemented")
+}
+func (UnimplementedBoilerplateServiceServer) SearchBoilerplates(context.Context, *SearchBoilerplatesRequest) (*SearchBoilerplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchBoilerplates not implemented")
 }
 func (UnimplementedBoilerplateServiceServer) mustEmbedUnimplementedBoilerplateServiceServer() {}
 func (UnimplementedBoilerplateServiceServer) testEmbeddedByValue()                            {}
@@ -138,6 +202,78 @@ func _BoilerplateService_GetBoilerplate_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BoilerplateService_UpdateBoilerplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBoilerplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoilerplateServiceServer).UpdateBoilerplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoilerplateService_UpdateBoilerplate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoilerplateServiceServer).UpdateBoilerplate(ctx, req.(*UpdateBoilerplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BoilerplateService_DeleteBoilerplate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteBoilerplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoilerplateServiceServer).DeleteBoilerplate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoilerplateService_DeleteBoilerplate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoilerplateServiceServer).DeleteBoilerplate(ctx, req.(*DeleteBoilerplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BoilerplateService_ListBoilerplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListBoilerplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoilerplateServiceServer).ListBoilerplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoilerplateService_ListBoilerplates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoilerplateServiceServer).ListBoilerplates(ctx, req.(*ListBoilerplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BoilerplateService_SearchBoilerplates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchBoilerplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BoilerplateServiceServer).SearchBoilerplates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BoilerplateService_SearchBoilerplates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BoilerplateServiceServer).SearchBoilerplates(ctx, req.(*SearchBoilerplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BoilerplateService_ServiceDesc is the grpc.ServiceDesc for BoilerplateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +288,22 @@ var BoilerplateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBoilerplate",
 			Handler:    _BoilerplateService_GetBoilerplate_Handler,
+		},
+		{
+			MethodName: "UpdateBoilerplate",
+			Handler:    _BoilerplateService_UpdateBoilerplate_Handler,
+		},
+		{
+			MethodName: "DeleteBoilerplate",
+			Handler:    _BoilerplateService_DeleteBoilerplate_Handler,
+		},
+		{
+			MethodName: "ListBoilerplates",
+			Handler:    _BoilerplateService_ListBoilerplates_Handler,
+		},
+		{
+			MethodName: "SearchBoilerplates",
+			Handler:    _BoilerplateService_SearchBoilerplates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
