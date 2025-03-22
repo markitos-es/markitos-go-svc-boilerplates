@@ -34,22 +34,30 @@ function log_success() {
     echo -e "\033[1;32m[SUCCESS]\033[0m $*"
 }
 
-#:[.'.]:> Preguntar por el SNYK_TOKEN
-echo -e "\033[1;36m🔑 ¿Tienes un SNYK_TOKEN para configurar? (Déjalo en blanco para usar 'replace_me')\033[0m"
-read -p "Introduce tu SNYK_TOKEN: " SNYK_TOKEN
-SNYK_TOKEN=${SNYK_TOKEN:-replace_me}
+#:[.'.]:> Detectar si SNYK_TOKEN ya está configurado
+if [[ -n "${SNYK_TOKEN:-}" ]]; then
+    DETECTED_SNYK_TOKEN="${SNYK_TOKEN:0:8}****"
+    echo -e "\033[1;36m🔑 Hemos detectado un SNYK_TOKEN configurado: $DETECTED_SNYK_TOKEN\033[0m"
+    echo -e "\033[1;36mSi deseas usar otro, introdúcelo a continuación. Si no, presiona ENTER para continuar con el detectado.\033[0m"
+else
+    echo -e "\033[1;36m🔑 No se detectó un SNYK_TOKEN configurado. Introduce uno a continuación o presiona ENTER para usar 'replace_me'.\033[0m"
+fi
+read -p "Introduce tu SNYK_TOKEN: " INPUT_SNYK_TOKEN
+SNYK_TOKEN=${INPUT_SNYK_TOKEN:-${SNYK_TOKEN:-replace_me}}
 
 #:[.'.]:> Mostrar lo que hará el script
 echo -e "\033[1;36m🛠️ Este script instalará las siguientes herramientas en ~/.local/bin:\033[0m"
 echo -e "  - \033[1;33mSnyk CLI\033[0m (https://snyk.io)"
 echo -e "  - \033[1;33mGitleaks\033[0m (https://github.com/gitleaks/gitleaks)"
+echo -e "  - \033[1;33mPre-commit hook\033[0m para seguridad en Git."
 echo
 echo -e "\033[1;36m📋 Resumen de acciones:\033[0m"
 echo -e "  1. Descargar los binarios."
 echo -e "  2. Moverlos a ~/.local/bin."
 echo -e "  3. Hacerlos ejecutables."
-echo -e "  4. Actualizar el PATH y configurar SNYK_TOKEN."
-echo -e "  5. Verificar las versiones instaladas."
+echo -e "  4. Instalar el pre-commit hook."
+echo -e "  5. Actualizar el PATH y configurar SNYK_TOKEN."
+echo -e "  6. Verificar las versiones instaladas."
 echo
 echo -e "\033[1;33m⚠️ Presiona CTRL+C para cancelar o ENTER para continuar...\033[0m"
 read -r
@@ -73,13 +81,37 @@ tar xfz gitleaks_8.24.0_linux_x64.tar.gz
 mv ./gitleaks ~/.local/bin/gitleaks
 chmod u+x ~/.local/bin/gitleaks
 
+#:[.'.]:> Instalar pre-commit hook
+cd "$SCRIPT_DIR/../"
+log_info "Instalando pre-commit hook..."
+PRE_COMMIT_SOURCE="$(pwd)/etc/pre-commit"
+PRE_COMMIT_DESTINATION=".git/hooks/pre-commit"
+
+if [ -f "$PRE_COMMIT_SOURCE" ]; then
+    cp "$PRE_COMMIT_SOURCE" "$PRE_COMMIT_DESTINATION"
+    chmod u+x "$PRE_COMMIT_DESTINATION"
+    log_success "Pre-commit hook instalado correctamente en $PRE_COMMIT_DESTINATION"
+else
+    log_error "No se encontró el archivo pre-commit en $PRE_COMMIT_SOURCE"
+fi
+
 #:[.'.]:> Actualizar PATH y configurar SNYK_TOKEN
-if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+if ! grep -Fxq 'export PATH=${PATH}:${HOME}/.local/bin' ~/.bashrc; then
     log_info "Actualizando PATH en ~/.bashrc..."
     echo 'export PATH=${PATH}:${HOME}/.local/bin' >> ~/.bashrc
+    log_success "PATH actualizado correctamente."
+else
+    log_info "El PATH ya incluye ~/.local/bin. No se realizaron cambios."
 fi
-log_info "Configurando SNYK_TOKEN en ~/.bashrc..."
-echo "export SNYK_TOKEN=${SNYK_TOKEN}" >> ~/.bashrc
+
+if ! grep -Fxq "export SNYK_TOKEN=${SNYK_TOKEN}" ~/.bashrc; then
+    log_info "Configurando SNYK_TOKEN en ~/.bashrc..."
+    echo "export SNYK_TOKEN=${SNYK_TOKEN}" >> ~/.bashrc
+    log_success "SNYK_TOKEN configurado correctamente."
+else
+    log_info "El SNYK_TOKEN ya está configurado en ~/.bashrc. No se realizaron cambios."
+fi
+
 source ~/.bashrc
 
 #:[.'.]:> Verificar las herramientas instaladas
@@ -100,6 +132,12 @@ if [[ "$GITLEAKS_VERSION" != "No instalado" ]]; then
     log_success "Gitleaks instalado correctamente. Versión: $GITLEAKS_VERSION"
 else
     log_error "Gitleaks no se instaló correctamente."
+fi
+
+if [ -f "$PRE_COMMIT_DESTINATION" ]; then
+    log_success "Pre-commit hook instalado correctamente."
+else
+    log_error "El pre-commit hook no se instaló correctamente."
 fi
 
 #:[.'.]:> Limpiar archivos temporales
