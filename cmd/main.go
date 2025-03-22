@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/api"
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/configuration"
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/api"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/configuration"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
+	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,7 +17,7 @@ var config configuration.BoilerplateConfiguration
 func main() {
 	log.Println("['.']:>")
 	log.Println("['.']:>--------------------------------------------")
-	log.Println("['.']:>--- <starting markitos-svc-boilerplate>  ---")
+	log.Println("['.']:>--- <starting markitos-svc-boilerplates>  ---")
 
 	config = loadConfiguration()
 	log.Println("['.']:>------- configuration loaded")

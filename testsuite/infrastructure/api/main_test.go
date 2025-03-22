@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/api"
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
-	"github.com/markitos/markitos-svc-boilerplate/testsuite/infrastructure/testdb"
-	internal_test "github.com/markitos/markitos-svc-boilerplate/testsuite/internal"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/api"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
+	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"github.com/markitos-es/markitos-svc-boilerplates/testsuite/infrastructure/testdb"
+	internal_test "github.com/markitos-es/markitos-svc-boilerplates/testsuite/internal"
 )
 
 var boilerplatesApiServer *api.Server

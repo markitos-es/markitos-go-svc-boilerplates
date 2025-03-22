@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
+	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,9 +4,9 @@ import (
 	"log"
 	"sync"
 
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/configuration"
-	"github.com/markitos/markitos-svc-boilerplate/infrastructure/database"
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/configuration"
+	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
+	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

@@ -1,6 +1,6 @@
 package services
 
-import "github.com/markitos/markitos-svc-boilerplate/internal/domain"
+import "github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 
 type BoilerplateDeleteRequest struct {
 	Id string `json:"id"`

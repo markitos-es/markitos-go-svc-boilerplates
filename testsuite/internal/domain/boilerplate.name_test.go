@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
+	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 )
 
 func TestCanCreateValidBoilerplateName(t *testing.T) {

@@ -7,6 +7,6 @@ services:
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
-      POSTGRES_DB: markitos-svc-boilerplate
+      POSTGRES_DB: markitos-svc-boilerplates
     ports:
       - "5432:5432"
