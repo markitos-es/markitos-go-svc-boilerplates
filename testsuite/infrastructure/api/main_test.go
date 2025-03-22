@@ -39,6 +39,10 @@ func createPersistedRandomBoilerplate() *domain.Boilerplate {
 	return boiler
 }
 
+func persistBoilerplate(boiler *domain.Boilerplate) {
+	testdb.GetRepository().Create(boiler)
+}
+
 func deletePersisteRandomBoilerplate(boilerId string) {
 	repository := database.NewBoilerPostgresRepository(testdb.GetDB())
 	id, err := domain.NewBoilerplateId(boilerId)

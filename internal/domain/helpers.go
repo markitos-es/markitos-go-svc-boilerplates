@@ -47,6 +47,10 @@ func UUIDv4() string {
 		uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:])
 }
 
+func RandomWord() string {
+	return RandomString(10)
+}
+
 func RandomPersonalName() string {
 	minWords, maxWords := 1, 6
 	wordCount, _ := rand.Int(rand.Reader, big.NewInt(int64(maxWords-minWords+1)))

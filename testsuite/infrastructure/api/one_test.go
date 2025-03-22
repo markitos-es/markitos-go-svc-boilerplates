@@ -36,15 +36,6 @@ func TestBoilerplateCantGetInvalidId(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, recorder.Code)
 }
 
-func TestBoilerplateCantGetMissingId(t *testing.T) {
-	recorder := httptest.NewRecorder()
-	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/", nil)
-	request.Header.Set("Content-Type", "application/json")
-	RESTRouter().ServeHTTP(recorder, request)
-
-	assert.Equal(t, http.StatusNotFound, recorder.Code)
-}
-
 func TestBoilerplateCantGetValidIdButNonExistingResource(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	request, _ := http.NewRequest(http.MethodGet, "/v1/boilerplates/"+domain.UUIDv4(), nil)

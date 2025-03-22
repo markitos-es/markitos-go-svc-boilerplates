@@ -15,6 +15,9 @@ type MockSpyBoilerRepository struct {
 	LastUpdatedBoilerId       *string
 	LastUpdatedBoilerName     *string
 	LastOneForUpdatedBoilerId *string
+	LastAllHaveBeenCalled     bool
+	LastUpdateHaveBeenCalled  bool
+	LastSearchHaveBeenCalled  bool
 }
 
 func NewMockSpyBoilerRepository() *MockSpyBoilerRepository {
@@ -25,6 +28,9 @@ func NewMockSpyBoilerRepository() *MockSpyBoilerRepository {
 		LastUpdatedBoilerId:       nil,
 		LastUpdatedBoilerName:     nil,
 		LastOneForUpdatedBoilerId: nil,
+		LastAllHaveBeenCalled:     false,
+		LastUpdateHaveBeenCalled:  false,
+		LastSearchHaveBeenCalled:  false,
 	}
 }
 
@@ -58,6 +64,7 @@ func (m *MockSpyBoilerRepository) DeleteHaveBeenCalledWith(boilerId *string) boo
 }
 
 func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
+	m.LastUpdateHaveBeenCalled = true
 	m.LastUpdatedBoilerId = &boiler.Id
 	m.LastUpdatedBoilerName = &boiler.Name
 	m.LastOneForUpdatedBoilerId = &boiler.Id
@@ -66,13 +73,25 @@ func (m *MockSpyBoilerRepository) Update(boiler *domain.Boilerplate) error {
 }
 
 func (m *MockSpyBoilerRepository) UpdateHaveBeenCalledWith(id, name string) bool {
+	var matchCalled bool = m.LastUpdateHaveBeenCalled
 	var matchId bool = *m.LastUpdatedBoilerId == id
 	var matchName bool = *m.LastUpdatedBoilerName == name
 
 	m.LastUpdatedBoilerId = nil
 	m.LastUpdatedBoilerName = nil
+	m.LastUpdateHaveBeenCalled = false
 
-	return matchId && matchName
+	return matchCalled && matchId && matchName
+}
+
+func (m *MockSpyBoilerRepository) UpdateHaveBeenCalled() bool {
+	var matchCalled bool = m.LastUpdateHaveBeenCalled
+
+	m.LastUpdateHaveBeenCalled = false
+	m.LastUpdatedBoilerId = nil
+	m.LastUpdatedBoilerName = nil
+
+	return matchCalled
 }
 
 func (m *MockSpyBoilerRepository) UpdateHaveBeenCalledOneWith(id string) bool {
@@ -99,7 +118,33 @@ func (m *MockSpyBoilerRepository) OneHaveBeenCalledWith(boilerId *string) bool {
 }
 
 func (m *MockSpyBoilerRepository) All() ([]*domain.Boilerplate, error) {
+	m.LastAllHaveBeenCalled = true
+
 	return nil, nil
+}
+
+func (m *MockSpyBoilerRepository) AllHaveBeenCalled() bool {
+	result := m.LastAllHaveBeenCalled
+	m.LastAllHaveBeenCalled = false
+
+	return result
+}
+
+func (m *MockSpyBoilerRepository) SearchAndPaginate(
+	searchTerm string,
+	pageNumber int,
+	pageSize int) ([]*domain.Boilerplate, error) {
+	m.LastSearchHaveBeenCalled = true
+
+	return nil, nil
+}
+
+func (m *MockSpyBoilerRepository) SearchHaveBeenCalled() bool {
+	result := m.LastSearchHaveBeenCalled
+
+	m.LastSearchHaveBeenCalled = false
+
+	return result
 }
 
 var repository *MockSpyBoilerRepository

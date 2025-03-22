@@ -18,3 +18,7 @@ createdb:
 	bash bin/createdb.sh
 dropdb:
 	bash bin/dropdb.sh
+install-appsec-tools:
+	bash bin/install-appsec-tools.sh
+certificate:
+	bash bin/github-ssh-key.sh $(name) $(email)

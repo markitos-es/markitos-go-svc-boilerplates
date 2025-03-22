@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+
 	"github.com/markitos/markitos-svc-boilerplate/internal/domain"
 	"gorm.io/gorm"
 )
@@ -42,6 +44,23 @@ func (r *BoilerPostgresRepository) All() ([]*domain.Boilerplate, error) {
 	var boilers []*domain.Boilerplate
 	if err := r.db.Find(&boilers).Error; err != nil {
 		return nil, domain.ErrBoilerplateBadRequest
+	}
+
+	return boilers, nil
+}
+
+func (r *BoilerPostgresRepository) SearchAndPaginate(
+	searchTerm string,
+	pageNumber int,
+	pageSize int) ([]*domain.Boilerplate, error) {
+	offset := (pageNumber - 1) * pageSize
+	var boilers []*domain.Boilerplate
+	if err := r.db.Where("name ILIKE ?", fmt.Sprintf("%%%s%%", searchTerm)).
+		Order("name").
+		Limit(pageSize).
+		Offset(offset).
+		Find(&boilers).Error; err != nil {
+		return nil, err
 	}
 
 	return boilers, nil

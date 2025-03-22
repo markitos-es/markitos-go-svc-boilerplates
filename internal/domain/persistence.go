@@ -6,4 +6,5 @@ type BoilerplateRepository interface {
 	One(id *BoilerplateId) (*Boilerplate, error)
 	Update(boilerplate *Boilerplate) error
 	All() ([]*Boilerplate, error)
+	SearchAndPaginate(searchTerm string, pageNumber int, pageSize int) ([]*Boilerplate, error)
 }
