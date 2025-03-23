@@ -33,15 +33,10 @@ IFS=$'\n\t'
 #:[.'.]:>-------------------------------------
 #:[.'.]:> Configuración de variables de entorno
 #:[.'.]:>-------------------------------------
-#:[.'.]:> Verifica si las variables ya están definidas, si no, usa valores predeterminados
-: ${DATABASE_DSN:="host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"}
-: ${HTTP_SERVER_ADDRESS:=":3000"}
-: ${GRPC_SERVER_ADDRESS:=":30000"}
-
-#:[.'.]:> Exporta las variables para que estén disponibles para el proceso hijo
-export DATABASE_DSN
-export HTTP_SERVER_ADDRESS
-export GRPC_SERVER_ADDRESS
+source "$SCRIPT_DIR/environment.sh"
+setup_environment
+show_config "full"
+#:[.'.]:>-------------------------------------
 
 #:[.'.]:> Muestra la configuración que vamos a usar
 echo "#:[.'.]:> 🚀 Iniciando con configuración:"

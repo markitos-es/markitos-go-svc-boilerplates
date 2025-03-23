@@ -34,14 +34,10 @@ function log_error() {
 #:[.'.]:>-------------------------------------
 #:[.'.]:> Configuración de variables de entorno
 #:[.'.]:>-------------------------------------
-#:[.'.]:> Verifica si las variables ya están definidas, si no, usa valores predeterminados
-: ${DATABASE_DSN:="host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"}
-#:[.'.]:> Exporta las variables para que estén disponibles para el proceso hijo
-export DATABASE_DSN
-#:[.'.]:> Muestra la configuración que vamos a usar
-echo "#:[.'.]:> 🚀 Iniciando con configuración:"
-echo "#:[.'.]:> 📊 DATABASE_DSN=$DATABASE_DSN"
-echo "#:[.'.]:>-------------------------------------"
+source "$SCRIPT_DIR/environment.sh"
+setup_environment
+show_config "full"
+#:[.'.]:>-------------------------------------
 
 
 # Extraer datos de conexión de DATABASE_DSN
