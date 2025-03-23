@@ -28,20 +28,18 @@ function log_error() {
     echo "[ERROR] $*" >&2
 }
 
-# Cargar variables de entorno desde app.env
-if [ -f app.env ]; then
-    set -o allexport
-    source app.env
-    set +o allexport
-else
-    log_error "El archivo app.env no existe"
-    exit 1
-fi
-# Verificar que DATABASE_DSN esté definido
-if [ -z "${DATABASE_DSN:-}" ]; then
-    log_error "DATABASE_DSN no está definido en app.env"
-    exit 1
-fi
+#:[.'.]:>-------------------------------------
+#:[.'.]:> Configuración de variables de entorno
+#:[.'.]:>-------------------------------------
+#:[.'.]:> Verifica si las variables ya están definidas, si no, usa valores predeterminados
+: ${DATABASE_DSN:="host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"}
+#:[.'.]:> Exporta las variables para que estén disponibles para el proceso hijo
+export DATABASE_DSN
+#:[.'.]:> Muestra la configuración que vamos a usar
+echo "#:[.'.]:> 🚀 Iniciando con configuración:"
+echo "#:[.'.]:> 📊 DATABASE_DSN=$DATABASE_DSN"
+echo "#:[.'.]:>-------------------------------------"
+
 
 # Extraer datos de conexión de DATABASE_DSN
 DB_NAME=$(echo $DATABASE_DSN | awk -F'[ =]' '{for(i=1;i<=NF;i++){if($i=="dbname"){print $(i+1)}}}')
