@@ -15,7 +15,7 @@ func (s *Server) CreateBoilerplate(ctx context.Context, in *CreateBoilerplateReq
 	}
 	response, err := service.Do(request)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to create boilerplate: %s", err)
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &CreateBoilerplateResponse{
