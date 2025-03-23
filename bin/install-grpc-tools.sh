@@ -66,16 +66,16 @@ sudo apt install protobuf-compiler libprotobuf-dev
 #:[.'.]:> -----------------------------------------------------
 #:[.'.]:> OPCION 2 Instalar manualmente (NO RECOMENDADO)
 #:[.'.]:> -----------------------------------------------------
-PROTOC_VERSION=30.1
-log_info "Descargando e instalando protoc (versión ${PROTOC_VERSION})..."
-cd /tmp
-curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
-sudo apt install unzip -y
-unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc
-mv protoc/bin/protoc ~/.local/bin/protoc
-mv protoc/include/* ~/.local/include/
-rm -rf protoc protoc-${PROTOC_VERSION}-linux-x86_64.zip
-log_success "protoc instalado correctamente. Versión: $(~/.local/bin/protoc --version)"
+# PROTOC_VERSION=30.1
+# log_info "Descargando e instalando protoc (versión ${PROTOC_VERSION})..."
+# cd /tmp
+# curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip
+# sudo apt install unzip -y
+# unzip protoc-${PROTOC_VERSION}-linux-x86_64.zip -d protoc
+# mv protoc/bin/protoc ~/.local/bin/protoc
+# mv protoc/include/* ~/.local/include/
+# rm -rf protoc protoc-${PROTOC_VERSION}-linux-x86_64.zip
+# log_success "protoc instalado correctamente. Versión: $(~/.local/bin/protoc --version)"
 #:[.'.]:> -----------------------------------------------------
 
 
