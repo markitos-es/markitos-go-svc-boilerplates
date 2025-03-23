@@ -33,6 +33,8 @@ func (s *Server) Router() *gin.Engine {
 }
 
 func (s *Server) createRouter() {
+	gin.SetMode(gin.ReleaseMode)
+
 	s.router = gin.Default()
 	s.router.POST("/v1/boilerplates", s.create)
 	s.router.PATCH("/v1/boilerplates/:id", s.update)
