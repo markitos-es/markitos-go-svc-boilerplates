@@ -6,7 +6,7 @@ import (
 
 type BoilerplateConfiguration struct {
 	DatabaseDsn       string `mapstructure:"DATABASE_DSN"`
-	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
+	ServerAddress     string `mapstructure:"HTTP_SERVER_ADDRESS"`
 	GRPCServerAddress string `mapstructure:"GRPC_SERVER_ADDRESS"`
 }
 

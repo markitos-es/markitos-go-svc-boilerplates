@@ -7,14 +7,17 @@ Este proyecto incluye herramientas y scripts para garantizar la seguridad en el 
 ## Índice 📚
 
 1. [Herramientas de Seguridad Incluidas 🔒](#herramientas-de-seguridad-incluidas-)
-  - [Snyk CLI](#1-snyk-cli)
-  - [Gitleaks](#2-gitleaks)
-  - [Generación de Claves SSH](#3-generación-de-claves-ssh)
+   - [Snyk CLI](#1-snyk-cli)
+   - [Gitleaks](#2-gitleaks)
+   - [Generación de Claves SSH](#3-generación-de-claves-ssh)
 2. [Ejecución de Seguridad con Makefile ⚙️](#ejecución-de-seguridad-con-makefile-️)
-  - [Análisis de Seguridad](#1-análisis-de-seguridad)
-  - [Generación de Certificados SSH](#2-generación-de-certificados-ssh)
+   - [Análisis de Seguridad](#1-análisis-de-seguridad)
+   - [Generación de Certificados SSH](#2-generación-de-certificados-ssh)
 3. [Ejemplo de Flujo de Seguridad 🛠️](#ejemplo-de-flujo-de-seguridad-️)
 4. [Configuración Adicional](#configuración-adicional)
+5. [Instalación de Herramientas Adicionales](#instalación-de-herramientas-adicionales)
+6. [Configuración y Uso de gRPC](#configuración-y-uso-de-grpc)
+7. [Comandos Disponibles en el Makefile](#comandos-disponibles-en-el-makefile)
 
 ---
 
@@ -134,5 +137,50 @@ El script `install-grpc-tools.sh` permite instalar herramientas necesarias para 
   Una vez instaladas, puedes generar código cliente y servidor para gRPC utilizando los comandos de `protoc`.
 
 ---
+
+## Configuración y Uso de gRPC
+
+### Generación de Código gRPC
+Para generar el código gRPC a partir de los archivos `.proto`, utiliza el siguiente comando:
+
+```bash
+make proto
+```
+
+Esto generará los archivos necesarios en el directorio `infrastructure/gapi`.
+
+### Ejecución del Servidor gRPC
+El servidor gRPC se ejecuta en el puerto configurado en `app.env` (por defecto, `7000`):
+
+```bash
+make run
+```
+
+### Pruebas de gRPC
+Para ejecutar las pruebas de gRPC, utiliza:
+
+```bash
+make test
+```
+
+---
+
+## Comandos Disponibles en el Makefile
+
+| Comando               | Descripción                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| `make test`           | Ejecuta las pruebas del proyecto.                                           |
+| `make testv`          | Ejecuta las pruebas del proyecto con salida detallada.                     |
+| `make postgres`       | Inicia el contenedor de PostgreSQL.                                         |
+| `make run`            | Ejecuta la aplicación en modo desarrollo.                                  |
+| `make prun`           | Ejecuta la aplicación en modo producción.                                  |
+| `make security`       | Ejecuta análisis de seguridad con Snyk y Gitleaks.                         |
+| `make createdb`       | Crea la base de datos y el usuario configurados en `app.env`.              |
+| `make dropdb`         | Elimina la base de datos y el usuario configurados en `app.env`.           |
+| `make install-appsec-tools` | Instala herramientas de seguridad como Snyk y Gitleaks.              |
+| `make install-grpc-tools`   | Instala herramientas necesarias para trabajar con gRPC.              |
+| `make certificate`    | Genera una clave SSH para autenticación.                                   |
+| `make proto`          | Genera el código gRPC a partir de los archivos `.proto`.                   |
+
 
 Con estas herramientas y configuraciones, puedes garantizar un desarrollo seguro y seguir las mejores prácticas de DevSecOps. ¡Asegúrate de integrarlas en tu flujo de trabajo! 🚀
