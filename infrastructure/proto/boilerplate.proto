@@ -45,13 +45,17 @@ message UpdateBoilerplateRequest {
   string name = 2;
 }
 
-message UpdateBoilerplateResponse {}
+message UpdateBoilerplateResponse {
+  string updated = 1;
+}
 
 message DeleteBoilerplateRequest {
   string id = 1;
 }
 
-message DeleteBoilerplateResponse {}
+message DeleteBoilerplateResponse {
+  string deleted = 1;
+}
 
 message ListBoilerplatesRequest {}
 

@@ -4,7 +4,7 @@ import (
 	context "context"
 
 	"github.com/markitos-es/markitos-svc-boilerplates/internal/services"
-	status "google.golang.org/grpc/status"
+	"google.golang.org/grpc/status"
 )
 
 func (s *Server) DeleteBoilerplate(ctx context.Context, in *DeleteBoilerplateRequest) (*DeleteBoilerplateResponse, error) {
@@ -15,5 +15,7 @@ func (s *Server) DeleteBoilerplate(ctx context.Context, in *DeleteBoilerplateReq
 		return nil, status.Error(s.GetGRPCCode(err), err.Error())
 	}
 
-	return &DeleteBoilerplateResponse{}, nil
+	return &DeleteBoilerplateResponse{
+		Deleted: request.Id,
+	}, nil
 }

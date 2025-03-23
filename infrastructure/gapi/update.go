@@ -17,5 +17,7 @@ func (s *Server) UpdateBoilerplate(ctx context.Context, in *UpdateBoilerplateReq
 		return nil, status.Error(s.GetGRPCCode(err), err.Error())
 	}
 
-	return &UpdateBoilerplateResponse{}, nil
+	return &UpdateBoilerplateResponse{
+		Updated: request.Id,
+	}, nil
 }

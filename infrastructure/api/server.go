@@ -1,6 +1,9 @@
 package api
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 )
@@ -46,4 +49,23 @@ func (s *Server) Run() error {
 
 func errorResonses(err error) gin.H {
 	return gin.H{"error": err.Error()}
+}
+
+func (s *Server) GetHTTPCode(err error) int {
+	var code int = http.StatusBadRequest
+	if errors.Is(err, domain.ErrBoilerplateNotFound) {
+		code = http.StatusNotFound
+	}
+
+	return code
+}
+
+func (s Server) GetParam(ctx *gin.Context, paramName string) (*string, error) {
+	response := ctx.Param(paramName)
+	if response == "" {
+		return nil, errors.New(paramName + " is required")
+
+	}
+
+	return &response, nil
 }
