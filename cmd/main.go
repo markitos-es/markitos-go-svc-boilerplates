@@ -30,10 +30,13 @@ func main() {
 	log.Println("['.']:>")
 	log.Println("['.']:>--------------------------------------------")
 	log.Println("['.']:>--- <starting markitos-svc-boilerplates>  ---")
+
 	loadConfiguration()
 	log.Println("['.']:>------- configuration loaded")
+
 	loadDatabase()
 	log.Println("['.']:>------- database initialized")
+
 	startServers()
 	log.Println("['.']:>--------------------------------------------")
 	log.Println("['.']:>--- <markitos-svc-boilerplates stopped>  ---")
@@ -112,23 +115,51 @@ func runRESTServer(ctx context.Context) error {
 	return server.ListenAndServe()
 }
 
+// #[.'.]:> Esta función inicia y maneja el ciclo de vida del servidor gRPC
 func runGRPCServer(ctx context.Context) error {
+	//#[.'.]:> PASO 1: Crear un "oído" (listener) en la red
+	//#[.'.]:> Este listener escuchará peticiones TCP en la dirección y puerto configurados
 	listener, err := net.Listen("tcp", config.GRPCServerAddress)
 	if err != nil {
 		return err
 	}
 
+	//#[.'.]:> PASO 2: Crear una nueva instancia del servidor gRPC
+	//#[.'.]:> Este objeto es el corazón del servidor y manejará todas las peticiones
 	grpcServer := grpc.NewServer()
+
+	//#[.'.]:> PASO 3: Crear la implementación de nuestro servicio
+	//#[.'.]:> Esta es la parte que contiene la lógica de negocio real
 	server := gapi.NewServer(config.HTTPServerAddress, repository)
+
+	//#[.'.]:> PASO 4: Registrar nuestro servicio en el servidor gRPC
+	//#[.'.]:> Esto conecta nuestras implementaciones con el sistema gRPC
 	gapi.RegisterBoilerplateServiceServer(grpcServer, server)
+
+	//#[.'.]:> PASO 5: Habilitar la reflexión para facilitar pruebas
+	//#[.'.]:> La reflexión permite que herramientas como grpcurl descubran nuestros servicios
 	reflection.Register(grpcServer)
 
+	//#[.'.]:> PASO 6: Configurar el apagado controlado (graceful shutdown)
+	//#[.'.]:> Esta goroutine se ejecuta en segundo plano y espera la señal de apagado
 	go func() {
+		//#[.'.]:> Bloquea hasta que el contexto se cancele (señal de apagado)
 		<-ctx.Done()
+
+		//#[.'.]:> Registra un mensaje indicando que se está apagando el servidor
 		log.Println("['.']:> shutting down gRPC server...")
+
+		//#[.'.]:> Realiza un apagado controlado:
+		//#[.'.]:> - Deja de aceptar nuevas conexiones
+		//#[.'.]:> - Espera a que terminen las llamadas en curso
+		//#[.'.]:> - Cierra todas las conexiones limpiamente
 		grpcServer.GracefulStop()
 	}()
 
+	//#[.'.]:> PASO 7: Registrar que el servidor está en funcionamiento
 	log.Printf("['.']:> gRPC server running at %s", config.GRPCServerAddress)
+
+	//#[.'.]:> PASO 8: Iniciar el servidor (este método bloquea hasta que ocurra un error)
+	//#[.'.]:> El servidor ahora escucha activamente las peticiones entrantes
 	return grpcServer.Serve(listener)
 }
