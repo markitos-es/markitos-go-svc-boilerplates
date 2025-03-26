@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ master, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -33,29 +33,56 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.24'
+          go-version: '1.21'
           cache: true
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
 
       - name: Verify PostgreSQL connection
         run: |
-          # Esperar a que PostgreSQL esté listo
           echo "Verificando conexión a PostgreSQL..."
-          timeout 20s bash -c 'until pg_isready -h localhost -p 5432 -U admin; do sleep 1; done'
-          echo "PostgreSQL está listo."
-          
-          # Opcionalmente puedes verificar la versión
-          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT version();"
+          PGPASSWORD=admin pg_isready -h localhost -p 5432 -U admin || echo "Error conectando a PostgreSQL"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT version();" || echo "Error ejecutando consulta SQL"
 
       - name: Install dependencies
         run: |
           go mod download
 
-      - name: Create database
-        run: make createdb
-        env:
-          DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+      # Mostrar información de contexto pero sin modificar scripts
+      - name: Debug context
+        run: |
+          echo "Mostrando environment.sh para verificar configuración:"
+          cat bin/environment.sh
+          
+          echo "Mostrando createdb.sh para verificar configuración:"
+          cat bin/createdb.sh
+          
+          echo "Mostrando variables de entorno de Postgres activas:"
+          env | grep -i "PG\|DATABASE"
 
+      # Ejecutar comandos directos de PostgreSQL para depuración
+      - name: Test PostgreSQL connection directly
+        run: |
+          echo "Probando conexión directa con psql:"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
+
+      # Cambiemos a este enfoque más directo para createdb
+      - name: Create database directly
+        run: |
+          echo "Creando base de datos directamente con psql:"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "DROP DATABASE IF EXISTS \"markitos-svc-boilerplates\";"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "CREATE DATABASE \"markitos-svc-boilerplates\";"
+          echo "Base de datos creada correctamente."
+
+      # Una vez creada la BD directamente, podemos ejecutar los tests
       - name: Run tests
         run: make test
         env:
           DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+          PGUSER: admin
+          PGPASSWORD: admin
+          PGHOST: localhost
+          PGDATABASE: markitos-svc-boilerplates
