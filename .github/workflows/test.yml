@@ -2,7 +2,7 @@ name: Test Unitarios Integración End-to-End
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ master ]
 
 jobs:
   build:
