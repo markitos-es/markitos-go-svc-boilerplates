@@ -1,4 +1,4 @@
-name: Run API and Perform DAST
+name: Run API and Perform OWASP DAST
 
 on:
   push:
