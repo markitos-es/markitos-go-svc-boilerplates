@@ -1,0 +1,49 @@
+name: Security SAST SCA LEAKS Analysis
+
+on:
+  push:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    name: Build, Test, and Security Analysis
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: markitos-svc-boilerplates-rest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+          cache: true
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Install security tools
+        run: |
+          bash bin/install-appsec-tools.sh
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run security analysis
+        run: make security
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
