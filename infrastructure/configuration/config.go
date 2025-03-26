@@ -3,7 +3,6 @@ package configuration
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -54,7 +53,6 @@ func LoadConfiguration(configFilesPath string) (config BoilerplateConfiguration,
 		fmt.Println("['.']:> ----------------------------------------")
 		fmt.Printf("['.']:> 🌐 HTTP Server: %s\n", config.HTTPServerAddress)
 		fmt.Printf("['.']:> 🚀 gRPC Server: %s\n", config.GRPCServerAddress)
-		fmt.Printf("['.']:> 🔐 Database: %s\n", maskDatabaseDsn(config.DatabaseDsn))
 		fmt.Println("['.']:> ----------------------------------------")
 		applyFallbackEnvVars(&config)
 	}
@@ -111,32 +109,4 @@ func applyFallbackEnvVars(config *BoilerplateConfiguration) {
 	if config.GRPCServerAddress == "" {
 		config.GRPCServerAddress = os.Getenv("GRPC_SERVER_ADDRESS")
 	}
-}
-
-// [.'.]:> 🛡️ Oculta la contraseña en la cadena de conexión a la base de datos
-// [.'.]:> para evitar exponer información sensible en los logs
-// [.'.]:> Si no hay cadena de conexión, avisa claramente que falta configuración
-func maskDatabaseDsn(dsn string) string {
-	if dsn == "" {
-		return "¡No configurada! 🚨"
-	}
-
-	if strings.Contains(dsn, "password=") {
-		parts := strings.Split(dsn, " ")
-		for i, part := range parts {
-			if strings.HasPrefix(part, "password=") {
-				password := strings.TrimPrefix(part, "password=")
-				maskedPassword := "password=******"
-				if len(password) > 0 {
-					if len(password) > 2 {
-						maskedPassword = fmt.Sprintf("password=%c****%c", password[0], password[len(password)-1])
-					}
-				}
-				parts[i] = maskedPassword
-			}
-		}
-		return strings.Join(parts, " ")
-	}
-
-	return dsn
 }

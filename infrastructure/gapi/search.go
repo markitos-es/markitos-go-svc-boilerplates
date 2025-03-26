@@ -9,6 +9,14 @@ import (
 )
 
 func (s *Server) SearchBoilerplates(ctx context.Context, in *SearchBoilerplatesRequest) (*SearchBoilerplatesResponse, error) {
+	if in.PageNumber < 1 {
+		return nil, status.Error(codes.InvalidArgument, "invalid page number")
+	}
+
+	if in.PageSize < 1 {
+		return nil, status.Error(codes.InvalidArgument, "invalid page size")
+	}
+
 	var service services.BoilerplateSearchService = services.NewBoilerplateSearchService(s.repository)
 	var request services.BoilerplateSearchRequest = services.BoilerplateSearchRequest{
 		SearchTerm: in.SearchTerm,
@@ -18,7 +26,7 @@ func (s *Server) SearchBoilerplates(ctx context.Context, in *SearchBoilerplatesR
 
 	response, err := service.Do(request)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, status.Error(s.GetGRPCCode(err), err.Error())
 	}
 
 	domainBoilerplates := response.Data

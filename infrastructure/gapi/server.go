@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
 	codes "google.golang.org/grpc/codes"
@@ -28,9 +29,20 @@ func (s *Server) Repository() domain.BoilerplateRepository {
 }
 
 func (s *Server) GetGRPCCode(err error) codes.Code {
+	// Default error code
 	var code codes.Code = codes.Internal
-	if errors.Is(err, domain.ErrBoilerplateNotFound) {
+
+	// Map domain errors to appropriate gRPC status codes
+	switch {
+	case errors.Is(err, domain.ErrBoilerplateNotFound):
 		code = codes.NotFound
+	case errors.Is(err, domain.ErrInvalidBoilerplateId),
+		errors.Is(err, domain.ErrInvalidBoilerplateName),
+		errors.Is(err, domain.ErrInvalidPageNumber),
+		errors.Is(err, domain.ErrInvalidPageSize),
+		strings.Contains(err.Error(), "invalid"),
+		strings.Contains(err.Error(), "Invalid"):
+		code = codes.InvalidArgument
 	}
 
 	return code

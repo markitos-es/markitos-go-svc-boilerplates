@@ -38,9 +38,6 @@ HTTP_SERVER_ADDRESS ?= :3000
 GRPC_SERVER_ADDRESS ?= :30000
 VERSION ?= 1.0.0
 
-# Variables Docker para conectar desde contenedor al host
-DOCKER_DATABASE_DSN ?= host=host.docker.internal user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable
-
 # Definir todos los targets como PHONY para evitar conflictos con archivos del mismo nombre
 .PHONY: test testv postgres run prun security createdb dropdb install-appsec-tools install-grpc-tools certificate proto image image-run
 
@@ -70,7 +67,8 @@ security:
 	@echo "#:[.'.]:> Ejecutando análisis Snyk..."
 	@SNYK_TOKEN=${SNYK_TOKEN} snyk code test
 	@echo "#:[.'.]:> Ejecutando Gitleaks para detectar secrets..."
-	@gitleaks detect .
+	@gitleaks detect --source . --verbose
+	@snyk test --all-projects --detection-depth=10
 
 #:[.'.]:> Crea la base de datos - ¡Preparando el terreno para nuestros datos!
 createdb:
@@ -106,7 +104,7 @@ image:
 image-run:
 	@echo "#:[.'.]:> Ejecutando imagen Docker versión: $(VERSION)"; \
 	docker run -p 3000:3000 -p 30000:30000 \
-	-e DATABASE_DSN="$(DOCKER_DATABASE_DSN)" \
+	-e DATABASE_DSN="$(DATABASE_DSN)" \
 	-e HTTP_SERVER_ADDRESS="$(HTTP_SERVER_ADDRESS)" \
 	-e GRPC_SERVER_ADDRESS="$(GRPC_SERVER_ADDRESS)" \
 	markitos-svc-boilerplates:$(VERSION)
