@@ -51,18 +51,6 @@ jobs:
         run: |
           go mod download
 
-      # Mostrar información de contexto pero sin modificar scripts
-      - name: Debug context
-        run: |
-          echo "Mostrando environment.sh para verificar configuración:"
-          cat bin/environment.sh
-          
-          echo "Mostrando createdb.sh para verificar configuración:"
-          cat bin/createdb.sh
-          
-          echo "Mostrando variables de entorno de Postgres activas:"
-          env | grep -i "PG\|DATABASE"
-
       # Ejecutar comandos directos de PostgreSQL para depuración
       - name: Test PostgreSQL connection directly
         run: |
@@ -77,9 +65,14 @@ jobs:
           PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "CREATE DATABASE \"markitos-svc-boilerplates\";"
           echo "Base de datos creada correctamente."
 
+      - name: Debug PostgreSQL container
+        run: |
+          docker ps
+          docker logs $(docker ps -q --filter "name=postgres")
+
       # Una vez creada la BD directamente, podemos ejecutar los tests
       - name: Run tests
-        run: make test
+        run: make testv
         env:
           DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
           PGUSER: admin
