@@ -66,9 +66,9 @@ security:
 	@echo "#:[.'.]:> Ejecutando análisis de seguridad en el código Go..."
 	@echo "#:[.'.]:> Ejecutando análisis Snyk..."
 	@SNYK_TOKEN=${SNYK_TOKEN} snyk code test
+	@SNYK_TOKEN=${SNYK_TOKEN} snyk test --all-projects --detection-depth=10
 	@echo "#:[.'.]:> Ejecutando Gitleaks para detectar secrets..."
 	@gitleaks detect --source . --verbose
-	@snyk test --all-projects --detection-depth=10
 
 #:[.'.]:> Crea la base de datos - ¡Preparando el terreno para nuestros datos!
 createdb:
