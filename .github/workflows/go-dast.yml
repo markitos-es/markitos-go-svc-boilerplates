@@ -75,9 +75,10 @@ jobs:
           PGHOST: localhost
           PGDATABASE: markitos-svc-boilerplates
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
       - name: Perform DAST
         run: |
           echo "Realizando análisis DAST..."
-          # Aquí puedes usar herramientas como OWASP ZAP o cualquier otra herramienta DAST
-          # Ejemplo con OWASP ZAP:
           docker run -v $(pwd):/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:3000 -r report.html
