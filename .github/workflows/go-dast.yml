@@ -81,4 +81,5 @@ jobs:
       - name: Perform DAST
         run: |
           echo "Realizando análisis DAST..."
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} && \
           docker run -v $(pwd):/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:3000 -r report.html
