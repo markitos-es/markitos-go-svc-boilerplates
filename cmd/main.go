@@ -199,7 +199,7 @@ func runGRPCServer(ctx context.Context) error {
 
 	//#[.'.]:> PASO 3: Crear la implementación de nuestro servicio
 	//#[.'.]:> Esta es la parte que contiene la lógica de negocio real
-	server := gapi.NewServer(config.HTTPServerAddress, repository)
+	server := gapi.NewServer(config.GRPCServerAddress, repository)
 
 	//#[.'.]:> PASO 4: Registrar nuestro servicio en el servidor gRPC
 	//#[.'.]:> Esto conecta nuestras implementaciones con el sistema gRPC
