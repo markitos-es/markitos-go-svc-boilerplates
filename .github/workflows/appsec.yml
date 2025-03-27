@@ -64,6 +64,7 @@ jobs:
         run: make install-appsec-tools
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          ASK_FOR_SNYK_TOKEN_BYPASS: "true"
 
       - name: Run security analysis
         run: make security

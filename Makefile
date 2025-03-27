@@ -80,7 +80,7 @@ dropdb:
 
 #:[.'.]:> Instala herramientas de seguridad - ¡El kit completo para estar protegidos!
 install-appsec-tools:
-	bash bin/install-appsec-tools.sh
+	ASK_FOR_SNYK_TOKEN_BYPASS=true SNYK_TOKEN=${SNYK_TOKEN} bash bin/install-appsec-tools.sh
 
 #:[.'.]:> Instala herramientas gRPC - ¡Todo lo necesario para trabajar con protobuf y gRPC!
 install-grpc-tools:

@@ -42,8 +42,13 @@ if [[ -n "${SNYK_TOKEN:-}" ]]; then
 else
     echo -e "\033[1;36m🔑 No se detectó un SNYK_TOKEN configurado. Introduce uno a continuación o presiona ENTER para usar 'replace_me'.\033[0m"
 fi
-read -p "Introduce tu SNYK_TOKEN: " INPUT_SNYK_TOKEN
-SNYK_TOKEN=${INPUT_SNYK_TOKEN:-${SNYK_TOKEN:-replace_me}}
+if [[ -z "${ASK_FOR_SNYK_TOKEN_BYPASS:-}" || "${ASK_FOR_SNYK_TOKEN_BYPASS}" != "true" ]]; then
+    read -p "Introduce tu SNYK_TOKEN: " INPUT_SNYK_TOKEN
+    SNYK_TOKEN=${INPUT_SNYK_TOKEN:-${SNYK_TOKEN:-replace_me}}
+else
+    echo -e "\033[1;36m🔑 ASK_FOR_SNYK_TOKEN_BYPASS está habilitado. Usando el SNYK_TOKEN existente o 'replace_me'.\033[0m"
+    SNYK_TOKEN=${SNYK_TOKEN:-replace_me}
+fi
 
 #:[.'.]:> Mostrar lo que hará el script
 echo -e "\033[1;36m🛠️ Este script instalará las siguientes herramientas en ~/.local/bin:\033[0m"
