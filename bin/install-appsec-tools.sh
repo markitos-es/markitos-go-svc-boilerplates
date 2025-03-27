@@ -59,8 +59,8 @@ echo -e "  4. Instalar el pre-commit hook."
 echo -e "  5. Actualizar el PATH y configurar SNYK_TOKEN."
 echo -e "  6. Verificar las versiones instaladas."
 echo
-echo -e "\033[1;33m⚠️ Presiona CTRL+C para cancelar o ENTER para continuar...\033[0m"
-read -r
+echo -e "\033[1;33m⚠️ Presiona CTRL+C para cancelar. Si no, el script continuará automáticamente en 10 segundos...\033[0m"
+sleep 10
 
 #:[.'.]:> Crear directorio ~/.local/bin si no existe
 mkdir -p ~/.local/bin
