@@ -2,7 +2,7 @@ name: Test Unitarios Integración End-to-End
 
 on:
   push:
-    branches: [ nonexisting-branch ]
+    branches: [ master, develop ]
 
 jobs:
   build:
@@ -56,12 +56,12 @@ jobs:
           PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
 
       # Cambiemos a este enfoque más directo para createdb
-      - name: Create database directly
-        run: |
-          echo "Creando base de datos directamente con psql:"
-          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "DROP DATABASE IF EXISTS \"markitos-svc-boilerplates\";"
-          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "CREATE DATABASE \"markitos-svc-boilerplates\";"
-          echo "Base de datos creada correctamente."
+      # - name: Create database directly
+      #   run: |
+      #     echo "Creando base de datos directamente con psql:"
+      #     PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "DROP DATABASE IF EXISTS \"markitos-svc-boilerplates\";"
+      #     PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "CREATE DATABASE \"markitos-svc-boilerplates\";"
+      #     echo "Base de datos creada correctamente."
 
       - name: Debug PostgreSQL container
         run: |
@@ -70,7 +70,10 @@ jobs:
 
       # Una vez creada la BD directamente, podemos ejecutar los tests
       - name: Run tests
-        run: make testv
+        run: |
+          make dropdb 2>&1 || true
+          make createdb && \
+          make testv
         env:
           DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
           PGUSER: admin

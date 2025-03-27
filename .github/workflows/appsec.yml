@@ -2,7 +2,7 @@ name: Security SAST SCA LEAKS Analysis
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ nonexisting-branch ]
 
 jobs:
   build:
