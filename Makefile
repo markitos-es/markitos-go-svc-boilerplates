@@ -102,10 +102,10 @@ image:
 
 #:[.'.]:> Ejecuta imagen Docker - ¡Prueba la imagen antes de desplegarla en producción!
 image-run:
-    docker run --rm \
-        -e DATABASE_DSN=$(DATABASE_DSN) \
-        -e HTTP_SERVER_ADDRESS=$(HTTP_SERVER_ADDRESS) \
-        -e GRPC_SERVER_ADDRESS=$(GRPC_SERVER_ADDRESS) \
-        -p 3000:3000 \
-        -p 30000:30000 \
-        markitos-svc-boilerplates:$(VERSION)
+	docker run --rm \
+		-e DATABASE_DSN=$(DATABASE_DSN) \
+		-e HTTP_SERVER_ADDRESS=$(HTTP_SERVER_ADDRESS) \
+		-e GRPC_SERVER_ADDRESS=$(GRPC_SERVER_ADDRESS) \
+		-p 3000:3000 \
+		-p 30000:30000 \
+		markitos-svc-boilerplates:$(VERSION)

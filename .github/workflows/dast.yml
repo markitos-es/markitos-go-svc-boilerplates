@@ -62,7 +62,8 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Build Docker image
-        run: make image
+        run: |
+          docker build -t markitos-svc-boilerplates:${{ github.sha }} .
         env:
           VERSION: ${{ github.sha }}
 
@@ -80,12 +81,16 @@ jobs:
           exit 1
 
       - name: Run Docker image
-        run: make image-run
-        env:
-          DATABASE_DSN: "host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
-          HTTP_SERVER_ADDRESS: ":3000"
-          GRPC_SERVER_ADDRESS: ":30000"
-          VERSION: ${{ github.sha }}
+        run: |
+          docker run --rm \
+            --name markitos-svc-boilerplates \
+            --network container:markitos-common-postgres \
+            -e DATABASE_DSN="host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
+            -e HTTP_SERVER_ADDRESS=":3000" \
+            -e GRPC_SERVER_ADDRESS=":30000" \
+            -p 3000:3000 \
+            -p 30000:30000 \
+            markitos-svc-boilerplates:${{ github.sha }}
 
       - name: Wait for application to be ready
         run: |
