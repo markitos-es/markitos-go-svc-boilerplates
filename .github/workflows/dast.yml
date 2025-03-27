@@ -59,11 +59,11 @@ jobs:
           VERSION: ${{ github.sha }}
 
       #:[.'.]:>-------------------------------------
-      #:[.'.]:> Ejecuta la imagen Docker
+      #:[.'.]:> Ejecuta la imagen Docker en segundo plano
       #:[.'.]:>-------------------------------------
       - name: Run Docker image
         run: |
-          docker run --rm \
+          docker run -d \
             --name markitos-svc-boilerplates \
             --link markitos-common-postgres:markitos-common-postgres \
             -e DATABASE_DSN="host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
@@ -103,5 +103,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
+          docker stop markitos-svc-boilerplates || true
+          docker rm markitos-svc-boilerplates || true
           docker stop markitos-common-postgres || true
           docker rm markitos-common-postgres || true
