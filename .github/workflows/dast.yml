@@ -13,26 +13,6 @@ jobs:
     name: Build and DAST
     runs-on: ubuntu-latest
 
-    #:[.'.]:>-------------------------------------
-    #:[.'.]:> Servicio de PostgreSQL
-    #:[.'.]:> Configura un contenedor de PostgreSQL para pruebas
-    #:[.'.]:>-------------------------------------
-    services:
-      markitos-common-postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: admin
-          POSTGRES_DB: markitos-svc-boilerplates
-        ports:
-          - 5432:5432
-        options: >-
-          --name markitos-common-postgres
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       #:[.'.]:>-------------------------------------
       #:[.'.]:> Clona el repositorio
@@ -41,13 +21,17 @@ jobs:
         uses: actions/checkout@v3
 
       #:[.'.]:>-------------------------------------
-      #:[.'.]:> Construye la imagen Docker
+      #:[.'.]:> Inicia un contenedor de PostgreSQL
       #:[.'.]:>-------------------------------------
-      - name: Build Docker image
+      - name: Start PostgreSQL container
         run: |
-          docker build -t markitos-svc-boilerplates:${{ github.sha }} .
-        env:
-          VERSION: ${{ github.sha }}
+          docker run -d \
+            --name markitos-common-postgres \
+            -e POSTGRES_USER=admin \
+            -e POSTGRES_PASSWORD=admin \
+            -e POSTGRES_DB=markitos-svc-boilerplates \
+            -p 5432:5432 \
+            postgres:16
 
       #:[.'.]:>-------------------------------------
       #:[.'.]:> Espera a que PostgreSQL esté listo
@@ -66,13 +50,22 @@ jobs:
           exit 1
 
       #:[.'.]:>-------------------------------------
+      #:[.'.]:> Construye la imagen Docker
+      #:[.'.]:>-------------------------------------
+      - name: Build Docker image
+        run: |
+          docker build -t markitos-svc-boilerplates:${{ github.sha }} .
+        env:
+          VERSION: ${{ github.sha }}
+
+      #:[.'.]:>-------------------------------------
       #:[.'.]:> Ejecuta la imagen Docker
       #:[.'.]:>-------------------------------------
       - name: Run Docker image
         run: |
           docker run --rm \
             --name markitos-svc-boilerplates \
-            --network markitos-svc-boilerplates_default \
+            --link markitos-common-postgres:markitos-common-postgres \
             -e DATABASE_DSN="host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
             -e HTTP_SERVER_ADDRESS=":3000" \
             -e GRPC_SERVER_ADDRESS=":30000" \
@@ -103,3 +96,12 @@ jobs:
         uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'http://localhost:3000'
+
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Limpia los contenedores al finalizar
+      #:[.'.]:>-------------------------------------
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop markitos-common-postgres || true
+          docker rm markitos-common-postgres || true
