@@ -44,10 +44,10 @@ jobs:
           make createdb && \
           make testv
         env:
-          DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+          DATABASE_DSN: "host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
           PGUSER: admin
           PGPASSWORD: admin
-          PGHOST: localhost
+          PGHOST: markitos-common-postgres
           PGDATABASE: markitos-svc-boilerplates
 
       - name: Install security tools
@@ -66,10 +66,23 @@ jobs:
         env:
           VERSION: ${{ github.sha }}
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            if docker exec markitos-common-postgres pg_isready -U admin > /dev/null 2>&1; then
+              echo "PostgreSQL is ready!"
+              exit 0
+            fi
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
+          echo "PostgreSQL did not become ready in time."
+          exit 1
+
       - name: Run Docker image
         run: make image-run
         env:
-          DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+          DATABASE_DSN: "host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
           HTTP_SERVER_ADDRESS: ":3000"
           GRPC_SERVER_ADDRESS: ":30000"
           VERSION: ${{ github.sha }}
