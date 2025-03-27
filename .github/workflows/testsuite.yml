@@ -1,14 +1,53 @@
 name: Test Unitarios Integración End-to-End
 
+#:#['.']:>----------------------------------------------------------------------
+#:#['.']:> ¡Este workflow es nuestro probador oficial! 🧪
+#:#['.']:> Se encarga de ejecutar tests unitarios, de integración y end-to-end
+#:#['.']:> para asegurarnos de que todo funciona como la seda. 🧵
+#:#['.']:> ¡Si pasa aquí, pasa en producción! ✅
+#:#['.']:>----------------------------------------------------------------------
 on:
   push:
-    branches: [ non-existent-branch ]
+    branches: [ master ] # 👈 ¡Cambia esto para activar!
+#:#['.']:>----------------------------------------------------------------------
+#:#['.']:> ¡Ejemplos de triggers! 🚀
+#:#['.']:>
+#:#['.']:> - Para ejecutar en cada push a la rama "main":
+#:#['.']:>   branches: [ main ]
+#:#['.']:>
+#:#['.']:> - Para ejecutar en cada pull request a la rama "develop":
+#:#['.']:>   pull_request:
+#:#['.']:>     branches: [ develop ]
+#:#['.']:>
+#:#['.']:> - Para ejecutar manualmente (workflow_dispatch):
+#:#['.']:>   workflow_dispatch:
+#:#['.']:>
+#:#['.']:> - Para ejecutar cada día a las 03:00 AM UTC:
+#:#['.']:>   schedule:
+#:#['.']:>     - cron: '0 3 * * *'
+#:#['.']:>
+#:#['.']:> - Para ejecutar en cada push de tags:
+#:#['.']:>   tags:
+#:#['.']:>     - '*'
+#:#['.']:>----------------------------------------------------------------------
 
+
+#:#['.']:>----------------------------------------------------------------------
+#:#['.']:> ¡Creamos el trabajo "build"! 🛠️
+#:#['.']:> Este trabajo es el que se encarga de ejecutar todos los pasos de las
+#:#['.']:> pruebas. ¡Es el cerebro de las operaciones! 🧠
+#:#['.']:>----------------------------------------------------------------------
 jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
 
+    #:#['.']:>------------------------------------------------------------------
+    #:#['.']:> ¡Levantamos PostgreSQL con Docker! 🐳
+    #:#['.']:> Necesitamos una base de datos para ejecutar las pruebas, así que
+    #:#['.']:> usamos Docker para levantar un contenedor de PostgreSQL.
+    #:#['.']:> ¡Rápido y fácil! 🚀
+    #:#['.']:>------------------------------------------------------------------
     services:
       markitos-common-postgres:
         image: postgres:16
@@ -25,41 +64,86 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    #:#['.']:>------------------------------------------------------------------
+    #:#['.']:> ¡Aquí vienen los pasos! 👣
+    #:#['.']:> Cada paso es una tarea específica que se ejecuta en el workflow.
+    #:#['.']:> ¡Vamos a ver qué hacen! 👀
+    #:#['.']:>------------------------------------------------------------------
     steps:
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Clonamos el código! 👯
+      #:#['.']:> Necesitamos una copia del código para poder ejecutar las pruebas.
+      #:#['.']:> ¡Sin código no hay pruebas! 🚫
+      #:#['.']:>----------------------------------------------------------------
       - name: Checkout code
         uses: actions/checkout@v3
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Configuramos Go! ⚙️
+      #:#['.']:> Necesitamos Go para instalar dependencias y ejecutar las pruebas.
+      #:#['.']:> ¡Go, go, go! 💨
+      #:#['.']:>----------------------------------------------------------------
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.24'
           cache: true
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Instalamos el cliente de PostgreSQL! 🐘
+      #:#['.']:> Necesitamos el cliente de PostgreSQL para conectarnos a la base
+      #:#['.']:> de datos y ejecutar algunas consultas. ¡Conectando! 🔌
+      #:#['.']:>----------------------------------------------------------------
       - name: Install PostgreSQL client
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Verificamos la conexión a PostgreSQL! ✅
+      #:#['.']:> Nos aseguramos de que podemos conectarnos a la base de datos y
+      #:#['.']:> que todo está funcionando correctamente. ¡Conexión establecida! 📡
+      #:#['.']:>----------------------------------------------------------------
       - name: Verify PostgreSQL connection
         run: |
           echo "Verificando conexión a PostgreSQL..."
           PGPASSWORD=admin pg_isready -h localhost -p 5432 -U admin || echo "Error conectando a PostgreSQL"
           PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT version();" || echo "Error ejecutando consulta SQL"
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Instalamos las dependencias de Go! ⬇️
+      #:#['.']:> Descargamos todas las dependencias necesarias para el proyecto.
+      #:#['.']:> ¡Dependencias al poder! 💪
+      #:#['.']:>----------------------------------------------------------------
       - name: Install dependencies
         run: |
           go mod download
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Probamos la conexión directa con psql! 🧪
+      #:#['.']:> Verificamos que podemos ejecutar consultas SQL directamente
+      #:#['.']:> desde el workflow. ¡Directo a la base de datos! 🗄️
+      #:#['.']:>----------------------------------------------------------------
       - name: Test PostgreSQL connection directly
         run: |
           echo "Probando conexión directa con psql:"
           PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Debugueamos el contenedor de PostgreSQL! 🐛
+      #:#['.']:> Si algo va mal, podemos inspeccionar el contenedor de
+      #:#['.']:> PostgreSQL para ver qué está pasando. ¡Detective en acción! 🕵️
+      #:#['.']:>----------------------------------------------------------------
       - name: Debug PostgreSQL container
         run: |
           docker ps
           docker logs $(docker ps -q --filter "name=postgres")
 
+      #:#['.']:>----------------------------------------------------------------
+      #:#['.']:> ¡Ejecutamos las pruebas! 🚦
+      #:#['.']:> Usamos el Makefile para ejecutar las pruebas unitarias, de
+      #:#['.']:> integración y end-to-end. ¡Que comiencen los juegos! 🎮
+      #:#['.']:>----------------------------------------------------------------
       - name: Run tests
         run: |
           make dropdb 2>&1 || true

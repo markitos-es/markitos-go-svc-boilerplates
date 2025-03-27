@@ -1,186 +1,298 @@
-# Seguridad en el Desarrollo 🛡️
+# 🚀 Markitos SVC Boilerplates
 
-Este proyecto incluye herramientas y scripts para garantizar la seguridad en el desarrollo siguiendo las mejores prácticas de DevSecOps. A continuación, se describen las herramientas disponibles, cómo utilizarlas y cómo integrarlas en tu flujo de trabajo.
-
----
-
-## Índice 📚
-
-1. [Herramientas de Seguridad Incluidas 🔒](#herramientas-de-seguridad-incluidas-)
-   - [Snyk CLI](#1-snyk-cli)
-   - [Gitleaks](#2-gitleaks)
-   - [Generación de Claves SSH](#3-generación-de-claves-ssh)
-2. [Ejecución de Seguridad con Makefile ⚙️](#ejecución-de-seguridad-con-makefile-️)
-   - [Análisis de Seguridad](#1-análisis-de-seguridad)
-   - [Generación de Certificados SSH](#2-generación-de-certificados-ssh)
-3. [Ejemplo de Flujo de Seguridad 🛠️](#ejemplo-de-flujo-de-seguridad-️)
-4. [Configuración Adicional](#configuración-adicional)
-5. [Instalación de Herramientas Adicionales](#instalación-de-herramientas-adicionales)
-6. [Configuración y Uso de gRPC](#configuración-y-uso-de-grpc)
-7. [Comandos Disponibles en el Makefile](#comandos-disponibles-en-el-makefile)
+¡Bienvenido a **Markitos SVC Boilerplates**! Este proyecto es un conjunto de plantillas y herramientas diseñadas para acelerar el desarrollo de servicios backend con las mejores prácticas de DevSecOps. 🥷
 
 ---
 
-## Herramientas de Seguridad Incluidas 🔒
+## 📋 Índice
 
-### 1. **Snyk CLI**
-Snyk es una herramienta que analiza el código fuente y las dependencias en busca de vulnerabilidades de seguridad.
-
-- **Instalación**: Usa el script `install-appsec-tools.sh` para instalar Snyk CLI.
-- **Uso**:
-  ```bash
-  make security
-  ```
-  Esto ejecutará un análisis de seguridad del código fuente utilizando Snyk.
-
-### 2. **Gitleaks**
-Gitleaks es una herramienta para detectar secretos y credenciales expuestos en el repositorio.
-
-- **Instalación**: Usa el script `install-appsec-tools.sh` para instalar Gitleaks.
-- **Uso**:
-  ```bash
-  make security
-  ```
-  Esto ejecutará un análisis de seguridad en busca de secretos expuestos utilizando Gitleaks.
-
-### 3. **Generación de Claves SSH**
-Puedes generar claves SSH para autenticarte con GitHub u otros servicios de forma segura.
-
-- **Uso**:
-  ```bash
-  make certificate name=<nombre-de-la-clave> email=<tu-email>
-  ```
-  Ejemplo:
-  ```bash
-  make certificate name=github-key email=tuemail@example.com
-  ```
-  Esto generará una clave SSH en el directorio `~/.ssh` con el nombre especificado y mostrará la clave pública para que puedas añadirla a tu cuenta de GitHub.
+1. 🎯 [¿Qué es esto?](#qué-es-esto)
+2. 🛠️ [Tecnologías utilizadas](#tecnologías-utilizadas)
+3. 🚀 [Cómo empezar](#cómo-empezar)
+4. ⚙️ [Configuración: Variables de entorno al poder](#configuración-variables-de-entorno-al-poder)
+5. 📂 [Estructura del proyecto](#estructura-del-proyecto)
+6. ☸️ [Pipelines de CI/CD](#pipelines-de-cicd)
+7. 🤝 [Contribuciones](#contribuciones)
+8. 🧪 [Testing](#testing)
+9. 🛡️ [Seguridad](#seguridad)
+10. 📜 [Licencia](#licencia)
+11. 🧙‍♂️ [Autor](#autor)
 
 ---
 
-## Ejecución de Seguridad con Makefile ⚙️
+## 🎯 ¿Qué es esto?
 
-El archivo Makefile incluye comandos para ejecutar las herramientas de seguridad y generar certificados SSH. A continuación, se describen los comandos disponibles:
+Este repositorio contiene boilerplates para servicios backend que incluyen:
 
-### 1. **Análisis de Seguridad**
-Ejecuta un análisis de seguridad completo utilizando Snyk y Gitleaks.
+- Configuración de **gRPC** y **Protobuf**.
+- Integración con **PostgreSQL** usando GORM.
+- Servidor **REST** con Gin.
+- Scripts para automatizar tareas comunes.
+- Hooks de pre-commit para seguridad y calidad del código.
+- ¡Y mucho más! 🚀
 
-```bash
-make security
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- **Go** (1.24.1)
+- **gRPC** y **Protobuf**
+- **PostgreSQL** con GORM
+- **Viper** para configuración
+- **Gin** para APIs REST
+- **Gitleaks** para detección de secretos
+- **Snyk** para análisis de vulnerabilidades
+
+---
+
+## 🚀 Cómo empezar
+
+1. Clona este repositorio:
+
+    ```bash
+    git clone https://github.com/markitos-es/markitos-svc-boilerplates.git
+    cd markitos-svc-boilerplates
+    ```
+
+2. Levanta la base de datos con Docker:
+
+    ```bash
+    make postgres
+    ```
+
+3. Crea la base de datos:
+
+    ```bash
+    make createdb
+    ```
+
+4. Ejecuta los tests:
+
+    ```bash
+    make test
+    ```
+
+    *   **Por qué:** Ejecuta las pruebas unitarias para verificar la integridad del código.
+
+    ```bash
+    make run
+    ```
+
+    *   **Por qué:** Ejecuta la aplicación localmente con la configuración predeterminada o las variables de entorno definidas.
+
+    ```bash
+    make image VERSION=1.2.3
+    ```
+
+    *   **Por qué:** Construye la imagen Docker con una versión específica.
+
+    ```bash
+    make testv
+    ```
+
+    *   **Por qué:** Ejecuta las pruebas en modo verboso, mostrando más detalles.
+
+    ```bash
+    make postgres
+    ```
+
+    *   **Por qué:** Levanta una instancia de PostgreSQL en Docker para desarrollo local.
+
+    ```bash
+    make createdb
+    ```
+
+    *   **Por qué:** Crea la base de datos y el usuario necesarios para la aplicación.
+
+    ```bash
+    make dropdb
+    ```
+
+    *   **Por qué:** Elimina la base de datos.
+
+    ```bash
+    make proto
+    ```
+
+    *   **Por qué:** Construye la imagen Docker con una versión específica.
+
+5. ¡Listo para desarrollar! 🎉
+
+---
+
+## ⚙️ Configuración: Variables de entorno al poder
+
+Este proyecto está diseñado para ser configurado principalmente a través de variables de entorno. Aunque se puede utilizar un archivo `app.env` para desarrollo local, **la configuración final y autoritativa siempre provendrá de las variables de entorno**.
+
+### ¿Por qué solo variables de entorno? 🤔
+
+- **Facilidad de despliegue:** Los entornos de producción modernos (Kubernetes, Cloud Functions, etc.) favorecen la configuración a través de variables de entorno.
+- **Seguridad:** Evita la inclusión de secretos (contraseñas, tokens) en el código fuente o archivos de configuración versionados.
+- **Consistencia:** Asegura que la configuración sea la misma en todos los entornos, reduciendo errores y sorpresas.
+
+### ¿Cómo configurar mi entorno? ⚙️
+
+1. **Variables obligatorias:**
+
+    - `DATABASE_DSN`: Cadena de conexión a la base de datos PostgreSQL. Ejemplo:
+
+        ```text
+        host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable
+        ```
+
+    - `HTTP_SERVER_ADDRESS`: Dirección del servidor REST. Ejemplo: `:3000`
+    - `GRPC_SERVER_ADDRESS`: Dirección del servidor gRPC. Ejemplo: `:30000`
+
+2. **Variables opcionales:**
+
+    - Si no se especifican `HTTP_SERVER_ADDRESS` y `GRPC_SERVER_ADDRESS`, se usarán los valores por defecto (`:3000` y `:30000` respectivamente).
+
+### Prioridad de configuración 🥇
+
+1. Variables de entorno (prioridad máxima).
+2. Archivo `app.env` (si existe, se sobreescribe con las variables de entorno).
+3. Valores por defecto (si no se encuentra ni variable de entorno ni valor en `app.env`).
+
+### Ejemplo de uso en Docker Compose 🐳
+
+```yaml
+version: "3.8"
+services:
+  app:
+    image: markitos-svc-boilerplates:latest
+    ports:
+      - "3000:3000"
+      - "30000:30000"
+    environment:
+      DATABASE_DSN: "host=db user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+      HTTP_SERVER_ADDRESS: ":3000"
+      GRPC_SERVER_ADDRESS: ":30000"
 ```
 
-### 2. **Generación de Certificados SSH**
-Genera una clave SSH para autenticarte con servicios como GitHub.
+### Recomendaciones ✅
 
-```bash
-make certificate name=<nombre-de-la-clave> email=<tu-email>
-```
-
-Ejemplo:
-```bash
-make certificate name=github-key email=tuemail@example.com
-```
-
-Esto generará una clave SSH en el directorio `~/.ssh` con el nombre especificado y mostrará la clave pública.
+- Utiliza herramientas como dotenv para gestionar variables de entorno en desarrollo local.
+- En entornos de producción, configura las variables de entorno directamente en el sistema operativo o plataforma de despliegue (Kubernetes Secrets, AWS Secrets Manager, etc.).
+- Evita incluir información sensible directamente en los archivos de definición de contenedores (Dockerfiles, docker-compose.yml).
 
 ---
 
-## Ejemplo de Flujo de Seguridad 🛠️
+## ☸️ Pipelines de CI/CD
 
-1. **Instalar herramientas de seguridad**:
-  ```bash
-  make install-appsec-tools
-  ```
+Este proyecto utiliza GitHub Actions para automatizar el proceso de Continuous Integration y Continuous Deployment (CI/CD). Los pipelines se definen en el directorio [.github/workflows](.github/workflows).
 
-2. **Ejecutar análisis de seguridad**:
-  ```bash
-  make security
-  ```
+### Pipelines activos ⚙️
 
-3. **Generar una clave SSH para GitHub**:
-  ```bash
-  make certificate name=github-key email=tuemail@example.com
-  ```
+1. **Publish Docker Image (publish.yml)**
 
-4. **Añadir la clave pública a tu cuenta de GitHub**:
-  Copia la clave pública generada (mostrada en la terminal) y añádela a tu cuenta de GitHub en la sección **SSH and GPG keys**.
+    - **Disparador:** Creación de un tag (ej: `1.2.3`).
+    - **Acciones:**
+        - Autentica con GitHub Packages.
+        - Construye la imagen Docker.
+        - Publica la imagen en GitHub Container Registry (ghcr.io).
+        - Verifica la imagen publicada.
+
+    - **Por qué:** Automatiza la publicación de nuevas versiones de la aplicación en el registro de contenedores.
+
+### Otros Pipelines (pueden activarse cambiando el branch) ⚙️
+
+1. **[Nombre del Pipeline]**
+
+    - **Disparador:** [Evento que dispara el pipeline].
+    - **Acciones:**
+        - [Lista de acciones que realiza el pipeline].
+
+    - **Por qué:** [Explicación del propósito del pipeline].
+
+### Recomendaciones ✅
+
+*   Para ejecutar la aplicación en modo de desarrollo (con logs detallados):
+
+    ```bash
+    make run
+    ```
+
+*   Para ejecutar la aplicación en modo de producción (sin logs detallados):
+
+    ```bash
+    GIN_MODE=release make run
+    ```
+
+    *   **Por qué:** Reduce la cantidad de información en los logs, útil para entornos de producción.
+
+*   Adapta los pipelines a tus necesidades específicas.
+*   Añade más pruebas y análisis de seguridad a los pipelines.
+*   Utiliza variables de entorno y secretos para configurar los pipelines de forma segura.
 
 ---
 
-## Configuración Adicional
+## 📂 Estructura del proyecto
 
-### Variables de Entorno
-El script `install-appsec-tools.sh` configura automáticamente las siguientes variables de entorno en tu archivo `~/.bashrc`:
-
-- **`PATH`**: Incluye el directorio `~/.local/bin` donde se instalan las herramientas.
-- **`SNYK_TOKEN`**: Token de autenticación para Snyk CLI. Si no se proporciona, se configura con el valor `replace_me`.
-
-Para asegurarte de que las variables están configuradas correctamente, ejecuta:
-```bash
-source ~/.bashrc
+```plaintext
+├── cmd/                # Punto de entrada de la aplicación
+├── infrastructure/     # Configuración, base de datos, gRPC, API REST, etc.
+├── bin/                # Scripts útiles
+├── etc/                # Configuración adicional (hooks, etc.)
+├── go.mod              # Dependencias del proyecto
+└── README.md           # Este archivo 😎
 ```
 
 ---
 
-## Instalación de Herramientas Adicionales
+## 🤝 Contribuciones
 
-### **Instalación de gRPC Tools**
-El script `install-grpc-tools.sh` permite instalar herramientas necesarias para trabajar con gRPC.
-
-- **Instalación**:
-  ```bash
-  make install-grpc-tools
-  ```
-  Esto instalará las herramientas de gRPC, como `protoc` y sus plugins, necesarias para generar código a partir de archivos `.proto`.
-
-- **Uso**:
-  Una vez instaladas, puedes generar código cliente y servidor para gRPC utilizando los comandos de `protoc`.
+¡Las contribuciones son bienvenidas! Si tienes ideas, mejoras o encuentras bugs, no dudes en abrir un issue o un pull request. 💡
 
 ---
 
-## Configuración y Uso de gRPC
+## 🧪 Testing
 
-### Generación de Código gRPC
-Para generar el código gRPC a partir de los archivos `.proto`, utiliza el siguiente comando:
+Este proyecto incluye un conjunto de pruebas automatizadas para garantizar la calidad del código y la funcionalidad. Antes de realizar un commit, asegúrate de ejecutar las pruebas para evitar introducir errores.
 
-```bash
-make proto
-```
+### Ejecutar pruebas
 
-Esto generará los archivos necesarios en el directorio `infrastructure/gapi`.
-
-### Ejecución del Servidor gRPC
-El servidor gRPC se ejecuta en el puerto configurado en `app.env` (por defecto, `7000`):
-
-```bash
-make run
-```
-
-### Pruebas de gRPC
-Para ejecutar las pruebas de gRPC, utiliza:
+Para ejecutar las pruebas, utiliza el siguiente comando:
 
 ```bash
 make test
 ```
 
+### Cobertura de pruebas
+
+Puedes generar un informe de cobertura de pruebas ejecutando:
+
+```bash
+go test ./... -coverprofile=coverage.out
+go tool cover -html=coverage.out
+```
+
+Esto abrirá un informe en tu navegador mostrando qué partes del código están cubiertas por las pruebas.
+
 ---
 
-## Comandos Disponibles en el Makefile
+## 🛡️ Seguridad
 
-| Comando               | Descripción                                                                 |
-|-----------------------|-----------------------------------------------------------------------------|
-| `make test`           | Ejecuta las pruebas del proyecto.                                           |
-| `make testv`          | Ejecuta las pruebas del proyecto con salida detallada.                     |
-| `make postgres`       | Inicia el contenedor de PostgreSQL.                                         |
-| `make run`            | Ejecuta la aplicación en modo desarrollo.                                  |
-| `make prun`           | Ejecuta la aplicación en modo producción.                                  |
-| `make security`       | Ejecuta análisis de seguridad con Snyk y Gitleaks.                         |
-| `make createdb`       | Crea la base de datos y el usuario configurados en `app.env`.              |
-| `make dropdb`         | Elimina la base de datos y el usuario configurados en `app.env`.           |
-| `make install-appsec-tools` | Instala herramientas de seguridad como Snyk y Gitleaks.              |
-| `make install-grpc-tools`   | Instala herramientas necesarias para trabajar con gRPC.              |
-| `make certificate`    | Genera una clave SSH para autenticación.                                   |
-| `make proto`          | Genera el código gRPC a partir de los archivos `.proto`.                   |
+La seguridad es una prioridad en este proyecto. Aquí hay algunas herramientas y prácticas que se utilizan:
 
+1. **Gitleaks**: Para detectar secretos en el código fuente.
+    - Ejecuta `gitleaks detect` para analizar el repositorio.
+2. **Snyk**: Para identificar vulnerabilidades en las dependencias.
+    - Ejecuta `snyk test` para realizar un análisis de seguridad.
 
-Con estas herramientas y configuraciones, puedes garantizar un desarrollo seguro y seguir las mejores prácticas de DevSecOps. ¡Asegúrate de integrarlas en tu flujo de trabajo! 🚀
+Asegúrate de revisar y solucionar cualquier problema reportado antes de desplegar a producción.
+
+---
+
+## 📜 Licencia
+
+Este proyecto está bajo la licencia MIT.  
+¡Haz lo que quieras con él, pero no olvides dar crédito! 😉
+
+---
+
+## 🧙‍♂️ Autor
+
+Creado con ❤️ por Marco Antonio (alias Markitos).
+
+- 💼 [LinkedIn](#)
+- 🐦 [Twitter](#)
