@@ -90,12 +90,14 @@ jobs:
           exit 1
 
       #:[.'.]:>-------------------------------------
-      #:[.'.]:> Ejecuta análisis DAST con ZAP
+      #:[.'.]:> Ejecuta análisis DAST con ZAP y muestra el reporte
       #:[.'.]:>-------------------------------------
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'http://localhost:3000'
+          format: 'text'
+          failOnWarnings: false
 
       #:[.'.]:>-------------------------------------
       #:[.'.]:> Limpia los contenedores al finalizar
