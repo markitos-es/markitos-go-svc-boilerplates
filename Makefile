@@ -109,3 +109,12 @@ image-run:
 		-p 3000:3000 \
 		-p 30000:30000 \
 		markitos-svc-boilerplates:$(VERSION)
+
+#:[.'.]:> Creacion de un tag para git
+tag:
+	@if [ -z "$(VERSION)" ]; then \
+		VERSION=1.0.0; \
+	fi; \
+	git tag -a $(VERSION) -m "[TAG:$(VERSION)] Version $(VERSION) released" && \
+	git push origin $(VERSION) && \
+	echo "#:[.'.]:> Tag $(VERSION) creado y subido a GitHub 🚀"

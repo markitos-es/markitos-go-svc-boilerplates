@@ -1,0 +1,52 @@
+name: Publish Docker Image
+
+#:[.'.]:>-------------------------------------
+#:[.'.]:> Evento que dispara el workflow
+#:[.'.]:> Se ejecuta cuando se crea un tag
+#:[.'.]:>-------------------------------------
+on:
+  push:
+    tags:
+      - '*.*.*' # Coincide con cualquier tag en formato SEMVER (ej: 1.0.0, 2.1.3)
+
+jobs:
+  publish:
+    name: Build and Publish Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Clona el repositorio
+      #:[.'.]:>-------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Autentica con GitHub Packages
+      #:[.'.]:>-------------------------------------
+      - name: Log in to GitHub Docker Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Construye la imagen Docker
+      #:[.'.]:>-------------------------------------
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/markitos-svc-boilerplates:${{ github.ref_name }} .
+        env:
+          VERSION: ${{ github.ref_name }}
+
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Publica la imagen en GitHub Packages
+      #:[.'.]:>-------------------------------------
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/markitos-svc-boilerplates:${{ github.ref_name }}
+
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Verifica la imagen publicada
+      #:[.'.]:>-------------------------------------
+      - name: Verify published image
+        run: |
+          echo "Docker image published successfully:"
+          echo "ghcr.io/${{ github.repository_owner }}/markitos-svc-boilerplates:${{ github.ref_name }}"
