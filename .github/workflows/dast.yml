@@ -2,7 +2,7 @@ name: Build, Test, and DAST
 
 on:
   push:
-    branches: [ master ]
+    branches: [ xmaster ]
 
 jobs:
   build:
