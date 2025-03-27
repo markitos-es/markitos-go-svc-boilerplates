@@ -2,23 +2,24 @@ name: Security SAST SCA LEAKS Analysis
 
 on:
   push:
-    branches: [ nonexisting-branch ]
+    branches: [ master ]
 
 jobs:
   build:
-    name: Build, Test, and Security Analysis
+    name: Build and Test
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      markitos-common-postgres:
         image: postgres:16
         env:
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: admin
-          POSTGRES_DB: markitos-svc-boilerplates-rest
+          POSTGRES_DB: markitos-svc-boilerplates
         ports:
           - 5432:5432
         options: >-
+          --name markitos-common-postgres
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
@@ -34,12 +35,33 @@ jobs:
           go-version: '1.24'
           cache: true
 
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Verify PostgreSQL connection
+        run: |
+          echo "Verificando conexión a PostgreSQL..."
+          PGPASSWORD=admin pg_isready -h localhost -p 5432 -U admin || echo "Error conectando a PostgreSQL"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT version();" || echo "Error ejecutando consulta SQL"
+
       - name: Install dependencies
-        run: go mod download
+        run: |
+          go mod download
+
+      - name: Test PostgreSQL connection directly
+        run: |
+          echo "Probando conexión directa con psql:"
+          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
+
+      - name: Debug PostgreSQL container
+        run: |
+          docker ps
+          docker logs $(docker ps -q --filter "name=postgres")
 
       - name: Install security tools
-        run: |
-          bash bin/install-appsec-tools.sh
+        run: make install-appsec-tools
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 

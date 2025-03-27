@@ -2,7 +2,7 @@ name: Test Unitarios Integración End-to-End
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ nonexisting-branch ]
 
 jobs:
   build:
@@ -50,26 +50,16 @@ jobs:
         run: |
           go mod download
 
-      # Ejecutar comandos directos de PostgreSQL para depuración
       - name: Test PostgreSQL connection directly
         run: |
           echo "Probando conexión directa con psql:"
           PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
-
-      # Cambiemos a este enfoque más directo para createdb
-      # - name: Create database directly
-      #   run: |
-      #     echo "Creando base de datos directamente con psql:"
-      #     PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "DROP DATABASE IF EXISTS \"markitos-svc-boilerplates\";"
-      #     PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d postgres -c "CREATE DATABASE \"markitos-svc-boilerplates\";"
-      #     echo "Base de datos creada correctamente."
 
       - name: Debug PostgreSQL container
         run: |
           docker ps
           docker logs $(docker ps -q --filter "name=postgres")
 
-      # Una vez creada la BD directamente, podemos ejecutar los tests
       - name: Run tests
         run: |
           make dropdb 2>&1 || true
