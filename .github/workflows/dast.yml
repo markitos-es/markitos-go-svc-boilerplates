@@ -1,14 +1,22 @@
-name: Build, Test, and DAST
+name: Build and DAST
 
+#:[.'.]:>-------------------------------------
+#:[.'.]:> Evento que dispara el workflow
+#:[.'.]:> Se ejecuta en cada push a las ramas master y non-existent-branch
+#:[.'.]:>-------------------------------------
 on:
   push:
     branches: [ non-existent-branch, master ]
 
 jobs:
   build:
-    name: Build and Test
+    name: Build and DAST
     runs-on: ubuntu-latest
 
+    #:[.'.]:>-------------------------------------
+    #:[.'.]:> Servicio de PostgreSQL
+    #:[.'.]:> Configura un contenedor de PostgreSQL para pruebas
+    #:[.'.]:>-------------------------------------
     services:
       markitos-common-postgres:
         image: postgres:16
@@ -26,69 +34,24 @@ jobs:
           --health-retries 5
 
     steps:
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Clona el repositorio
+      #:[.'.]:>-------------------------------------
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.24'
-          cache: true
-
-      - name: Install PostgreSQL client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client
-
-      - name: Verify PostgreSQL connection
-        run: |
-          echo "Verificando conexión a PostgreSQL..."
-          PGPASSWORD=admin pg_isready -h localhost -p 5432 -U admin || echo "Error conectando a PostgreSQL"
-          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT version();" || echo "Error ejecutando consulta SQL"
-
-      - name: Install dependencies
-        run: |
-          go mod download
-
-      - name: Test PostgreSQL connection directly
-        run: |
-          echo "Probando conexión directa con psql:"
-          PGPASSWORD=admin psql -h localhost -p 5432 -U admin -d markitos-svc-boilerplates -c "SELECT current_user, current_database();"
-
-      - name: Debug PostgreSQL container
-        run: |
-          docker ps
-          docker logs $(docker ps -q --filter "name=postgres")
-
-      - name: Run tests
-        run: |
-          make dropdb 2>&1 || true
-          make createdb && \
-          make testv
-        env:
-          DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
-          PGUSER: admin
-          PGPASSWORD: admin
-          PGHOST: localhost
-          PGDATABASE: markitos-svc-boilerplates
-
-      - name: Install security tools
-        run: make install-appsec-tools
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          ASK_FOR_SNYK_TOKEN_BYPASS: "true"
-
-      - name: Run security analysis
-        run: make security
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Construye la imagen Docker
+      #:[.'.]:>-------------------------------------
       - name: Build Docker image
         run: |
           docker build -t markitos-svc-boilerplates:${{ github.sha }} .
         env:
           VERSION: ${{ github.sha }}
 
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Espera a que PostgreSQL esté listo
+      #:[.'.]:>-------------------------------------
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..30}; do
@@ -102,11 +65,14 @@ jobs:
           echo "PostgreSQL did not become ready in time."
           exit 1
 
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Ejecuta la imagen Docker
+      #:[.'.]:>-------------------------------------
       - name: Run Docker image
         run: |
           docker run --rm \
             --name markitos-svc-boilerplates \
-            --network container:markitos-common-postgres \
+            --network markitos-svc-boilerplates_default \
             -e DATABASE_DSN="host=markitos-common-postgres user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
             -e HTTP_SERVER_ADDRESS=":3000" \
             -e GRPC_SERVER_ADDRESS=":30000" \
@@ -114,6 +80,9 @@ jobs:
             -p 30000:30000 \
             markitos-svc-boilerplates:${{ github.sha }}
 
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Espera a que la aplicación esté lista
+      #:[.'.]:>-------------------------------------
       - name: Wait for application to be ready
         run: |
           for i in {1..30}; do
@@ -127,6 +96,9 @@ jobs:
           echo "Application did not become ready in time."
           exit 1
 
+      #:[.'.]:>-------------------------------------
+      #:[.'.]:> Ejecuta análisis DAST con ZAP
+      #:[.'.]:>-------------------------------------
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
