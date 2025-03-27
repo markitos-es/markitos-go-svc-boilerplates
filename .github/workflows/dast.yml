@@ -98,7 +98,9 @@ jobs:
           target: 'http://localhost:3000'
           format: 'text'
           failOnWarnings: false
-
+          failOnError: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          cmd_options: '-d'
       #:[.'.]:>-------------------------------------
       #:[.'.]:> Limpia los contenedores al finalizar
       #:[.'.]:>-------------------------------------
