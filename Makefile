@@ -25,6 +25,8 @@
 # make install-grpc-tools    → Instala herramientas gRPC
 # make certificate           → Genera certificado SSH
 # make proto                 → Genera código desde definiciones proto
+# make caas                  → Clone As A Service - Crea nuevos servicios usando esta plantilla
+#                              (ej: make caas SERVICE_NAME=pepito-svc-mariposas ENTITY_NAME=butterfly)
 #
 # 🐳 DOCKER:
 # -------
@@ -39,7 +41,7 @@ GRPC_SERVER_ADDRESS ?= :30000
 VERSION ?= 1.0.0
 
 # Definir todos los targets como PHONY para evitar conflictos con archivos del mismo nombre
-.PHONY: test testv postgres run prun security createdb dropdb install-appsec-tools install-grpc-tools certificate proto image image-run
+.PHONY: test testv postgres run prun security createdb dropdb install-appsec-tools install-grpc-tools certificate proto image image-run caas
 
 #:[.'.]:> Ejecuta tests unitarios - ¡Aseguramos que todo funcione como debe!
 test:
@@ -118,3 +120,12 @@ tag:
 	git tag -a $(VERSION) -m "[TAG:$(VERSION)] Version $(VERSION) released" && \
 	git push origin $(VERSION) && \
 	echo "#:[.'.]:> Tag $(VERSION) creado y subido a GitHub 🚀"
+
+#:[.'.]:> Clone As A Service - ¡Crea un nuevo servicio a partir de esta plantilla!
+caas:
+	@if [ -z "$(SERVICE_NAME)" ] || [ -z "$(ENTITY_NAME)" ]; then \
+		echo "#:[.'.]:> ❌ Error: Se necesitan los parámetros SERVICE_NAME y ENTITY_NAME."; \
+		echo "#:[.'.]:> Uso: make caas SERVICE_NAME=pepito-svc-mariposas ENTITY_NAME=butterfly"; \
+		exit 1; \
+	fi
+	bash bin/clone-caas.sh "$(SERVICE_NAME)" "$(ENTITY_NAME)"
