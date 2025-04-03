@@ -8,8 +8,8 @@ import (
 )
 
 func TestBoilerplateCanListAllResources(t *testing.T) {
-	boiler1 := createPersistedRandomBoilerplate()
-	boiler2 := createPersistedRandomBoilerplate()
+	boilerplate1 := createPersistedRandomBoilerplate()
+	boilerplate2 := createPersistedRandomBoilerplate()
 
 	resp, err := grpcClient.ListBoilerplates(ctx, &gapi.ListBoilerplatesRequest{})
 
@@ -18,16 +18,16 @@ func TestBoilerplateCanListAllResources(t *testing.T) {
 
 	found1, found2 := false, false
 	for _, b := range resp.Boilerplates {
-		if b.Id == boiler1.Id {
+		if b.Id == boilerplate1.Id {
 			found1 = true
 		}
-		if b.Id == boiler2.Id {
+		if b.Id == boilerplate2.Id {
 			found2 = true
 		}
 	}
 	assert.True(t, found1, "First boilerplate not found in response")
 	assert.True(t, found2, "Second boilerplate not found in response")
 
-	deletePersistedRandomBoilerplate(boiler1.Id)
-	deletePersistedRandomBoilerplate(boiler2.Id)
+	deletePersistedRandomBoilerplate(boilerplate1.Id)
+	deletePersistedRandomBoilerplate(boilerplate2.Id)
 }

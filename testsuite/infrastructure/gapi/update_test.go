@@ -11,21 +11,21 @@ import (
 )
 
 func TestCanUpdateABoilerplate(t *testing.T) {
-	boiler := createPersistedRandomBoilerplate()
-	updatedName := boiler.Name + " UPDATED"
+	boilerplate := createPersistedRandomBoilerplate()
+	updatedName := boilerplate.Name + " UPDATED"
 
 	resp, err := grpcClient.UpdateBoilerplate(ctx, &gapi.UpdateBoilerplateRequest{
-		Id:   boiler.Id,
+		Id:   boilerplate.Id,
 		Name: updatedName,
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, boiler.Id, resp.Updated)
+	assert.Equal(t, boilerplate.Id, resp.Updated)
 
-	getResp, _ := grpcClient.GetBoilerplate(ctx, &gapi.GetBoilerplateRequest{Id: boiler.Id})
+	getResp, _ := grpcClient.GetBoilerplate(ctx, &gapi.GetBoilerplateRequest{Id: boilerplate.Id})
 	assert.Equal(t, updatedName, getResp.Name)
 
-	deletePersistedRandomBoilerplate(boiler.Id)
+	deletePersistedRandomBoilerplate(boilerplate.Id)
 }
 
 func TestCantUpdateANonExistingBoilerplate(t *testing.T) {

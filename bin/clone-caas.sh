@@ -64,10 +64,12 @@ echo "#:[.'.]:> 🧹 Eliminando el directorio .git por seguridad..."
 rm -fr "$TEMP_DIR/.git" 2>/dev/null || true
 
 # Replace content in files
-echo "#:[.'.]:> 📝 Reemplazando contenido en todos los archivos..."
-find "$TEMP_DIR" -type f -not -path "*/\.*" -exec grep -l "$CURRENT_DIR" {} \; | xargs -I{} sed -i "s/$CURRENT_DIR/$NEW_SERVICE_NAME/g" {} 2>/dev/null || true
-find "$TEMP_DIR" -type f -not -path "*/\.*" -exec grep -l "boilerplates" {} \; | xargs -I{} sed -i "s/boilerplates/$ENTITY_NAME_PLURAL/g" {} 2>/dev/null || true
-find "$TEMP_DIR" -type f -not -path "*/\.*" -exec grep -l "boilerplate" {} \; | xargs -I{} sed -i "s/boilerplate/$ENTITY_NAME/g" {} 2>/dev/null || true
+echo "#:[.'.]:> 📝 Reemplazando contenido en todos los archivos, incluidos los ocultos..."
+find "$TEMP_DIR" -type f -exec sed -i "s/$CURRENT_DIR/$NEW_SERVICE_NAME/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -type f -exec sed -i "s/boilerplates/$ENTITY_NAME_PLURAL/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -type f -exec sed -i "s/boilerplate/$ENTITY_NAME/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -type f -exec sed -i "s/Boilerplate/${ENTITY_NAME^}/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -type f -exec sed -i "s/BOILERPLATE/${ENTITY_NAME^^}/g" {} \; 2>/dev/null || true
 
 # Move from temp to final destination
 echo "#:[.'.]:> 📦 Moviendo a ubicación final..."

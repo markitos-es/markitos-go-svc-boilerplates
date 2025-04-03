@@ -64,13 +64,13 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 }
 
 func createPersistedRandomBoilerplate() *domain.Boilerplate {
-	boiler := internal_test.NewRandomBoilerplate()
-	testdb.GetRepository().Create(boiler)
-	return boiler
+	boilerplate := internal_test.NewRandomBoilerplate()
+	testdb.GetRepository().Create(boilerplate)
+	return boilerplate
 }
 
-func deletePersistedRandomBoilerplate(boilerId string) {
-	id, err := domain.NewBoilerplateId(boilerId)
+func deletePersistedRandomBoilerplate(boilerplateId string) {
+	id, err := domain.NewBoilerplateId(boilerplateId)
 	if err != nil {
 		return
 	}

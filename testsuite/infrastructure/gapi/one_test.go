@@ -11,15 +11,15 @@ import (
 )
 
 func TestBoilerplateCanGetOne(t *testing.T) {
-	boiler := createPersistedRandomBoilerplate()
+	boilerplate := createPersistedRandomBoilerplate()
 
 	resp, err := grpcClient.GetBoilerplate(ctx, &gapi.GetBoilerplateRequest{
-		Id: boiler.Id,
+		Id: boilerplate.Id,
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, boiler.Name, resp.Name)
-	assert.Equal(t, boiler.Id, resp.Id)
+	assert.Equal(t, boilerplate.Name, resp.Name)
+	assert.Equal(t, boilerplate.Id, resp.Id)
 
 	deletePersistedRandomBoilerplate(resp.Id)
 }

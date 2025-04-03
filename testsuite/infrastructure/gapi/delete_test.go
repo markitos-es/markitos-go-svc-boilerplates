@@ -11,16 +11,16 @@ import (
 )
 
 func TestBoilerplateCanDelete(t *testing.T) {
-	boiler := createPersistedRandomBoilerplate()
+	boilerplate := createPersistedRandomBoilerplate()
 
 	resp, err := grpcClient.DeleteBoilerplate(ctx, &gapi.DeleteBoilerplateRequest{
-		Id: boiler.Id,
+		Id: boilerplate.Id,
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, boiler.Id, resp.Deleted)
+	assert.Equal(t, boilerplate.Id, resp.Deleted)
 
-	_, err = grpcClient.GetBoilerplate(ctx, &gapi.GetBoilerplateRequest{Id: boiler.Id})
+	_, err = grpcClient.GetBoilerplate(ctx, &gapi.GetBoilerplateRequest{Id: boilerplate.Id})
 	assert.Error(t, err)
 }
 
