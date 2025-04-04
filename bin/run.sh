@@ -38,13 +38,6 @@ setup_environment
 show_config "full"
 #:[.'.]:>-------------------------------------
 
-#:[.'.]:> Muestra la configuración que vamos a usar
-echo "#:[.'.]:> 🚀 Iniciando con configuración:"
-echo "#:[.'.]:> 📊 DATABASE_DSN=$DATABASE_DSN"
-echo "#:[.'.]:> 🌐 HTTP_SERVER_ADDRESS=$HTTP_SERVER_ADDRESS"
-echo "#:[.'.]:> 📡 GRPC_SERVER_ADDRESS=$GRPC_SERVER_ADDRESS"
-echo "#:[.'.]:>-------------------------------------"
-
 #:[.'.]:> Ejecuta la aplicación con la configuración establecida
 go run cmd/main.go
 #:[.'.]:>-------------------------------------
