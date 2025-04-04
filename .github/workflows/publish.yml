@@ -8,7 +8,7 @@ name: Publish Docker Image
 on:
   push:
     tags:
-      - '*.*.*' # 👈 ¡Cambia esto para activar!
+      - 'DISABLED_*.*.*' # 👈 ¡Cambia esto para activar quita: DISABLED_!
 #:#['.']:>----------------------------------------------------------------------
 #:#['.']:> ¡Ejemplos de triggers! 🚀
 #:#['.']:>
