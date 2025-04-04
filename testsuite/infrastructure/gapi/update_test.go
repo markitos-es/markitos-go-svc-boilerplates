@@ -3,8 +3,9 @@ package gapi_test
 import (
 	"testing"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/gapi"
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/infrastructure/gapi"
+	"markitos-svc-boilerplates/internal/domain"
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

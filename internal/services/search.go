@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/internal/domain"
 )
 
 type BoilerplateSearchResponse struct {

@@ -3,7 +3,8 @@ package gapi_test
 import (
 	"testing"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/gapi"
+	"markitos-svc-boilerplates/infrastructure/gapi"
+
 	"github.com/stretchr/testify/assert"
 )
 

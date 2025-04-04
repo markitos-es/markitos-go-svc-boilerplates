@@ -4,10 +4,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
-	"github.com/markitos-es/markitos-svc-boilerplates/testsuite/infrastructure/testdb"
-	internal_test "github.com/markitos-es/markitos-svc-boilerplates/testsuite/internal"
+	"markitos-svc-boilerplates/infrastructure/database"
+	"markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/testsuite/infrastructure/testdb"
+	internal_test "markitos-svc-boilerplates/testsuite/internal"
+
 	"github.com/stretchr/testify/require"
 )
 

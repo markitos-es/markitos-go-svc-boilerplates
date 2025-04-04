@@ -1,6 +1,6 @@
 package services
 
-import "github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+import "markitos-svc-boilerplates/internal/domain"
 
 type BoilerplateCreateRequest struct {
 	Name string

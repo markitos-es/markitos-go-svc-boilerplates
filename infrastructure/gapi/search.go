@@ -3,7 +3,8 @@ package gapi
 import (
 	context "context"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/services"
+	"markitos-svc-boilerplates/internal/services"
+
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 )

@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
-	internal_test "github.com/markitos-es/markitos-svc-boilerplates/testsuite/internal"
+	"markitos-svc-boilerplates/internal/domain"
+	internal_test "markitos-svc-boilerplates/testsuite/internal"
 )
 
 type MockSpyBoilerRepository struct {

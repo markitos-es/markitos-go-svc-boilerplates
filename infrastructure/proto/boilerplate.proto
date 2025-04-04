@@ -4,7 +4,7 @@ package boilerplate;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/markitos-es/markitos-svc-boilerplates-grpc/gapi";
+option go_package = "markitos-svc-boilerplates-grpc/gapi";
 
 message Boilerplate {
   string id = 1;

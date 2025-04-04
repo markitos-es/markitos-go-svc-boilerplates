@@ -71,6 +71,30 @@ find "$TEMP_DIR" -type f -exec sed -i "s/boilerplate/$ENTITY_NAME/g" {} \; 2>/de
 find "$TEMP_DIR" -type f -exec sed -i "s/Boilerplate/${ENTITY_NAME^}/g" {} \; 2>/dev/null || true
 find "$TEMP_DIR" -type f -exec sed -i "s/BOILERPLATE/${ENTITY_NAME^^}/g" {} \; 2>/dev/null || true
 
+# First replace in proto files
+echo "#:[.'.]:> 📝 Reemplazando contenido en archivos proto..."
+find "$TEMP_DIR" -name "*.proto" -type f -exec sed -i "s/$CURRENT_DIR/$NEW_SERVICE_NAME/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -name "*.proto" -type f -exec sed -i "s/boilerplates/$ENTITY_NAME_PLURAL/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -name "*.proto" -type f -exec sed -i "s/boilerplate/$ENTITY_NAME/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -name "*.proto" -type f -exec sed -i "s/Boilerplate/${ENTITY_NAME^}/g" {} \; 2>/dev/null || true
+find "$TEMP_DIR" -name "*.proto" -type f -exec sed -i "s/BOILERPLATE/${ENTITY_NAME^^}/g" {} \; 2>/dev/null || true
+
+# Rename proto file
+echo "#:[.'.]:> 📝 Renombrando archivo proto..."
+mv "$TEMP_DIR/infrastructure/proto/boilerplate.proto" "$TEMP_DIR/infrastructure/proto/${ENTITY_NAME}.proto" 2>/dev/null || true
+
+# Clean generated files
+echo "#:[.'.]:> 🧹 Limpiando archivos generados anteriores..."
+rm -f "$TEMP_DIR/infrastructure/gapi/boilerplate.pb.go" 2>/dev/null || true
+rm -f "$TEMP_DIR/infrastructure/gapi/boilerplate_grpc.pb.go" 2>/dev/null || true
+rm -f "$TEMP_DIR/infrastructure/gapi/${ENTITY_NAME}.pb.go" 2>/dev/null || true
+rm -f "$TEMP_DIR/infrastructure/gapi/${ENTITY_NAME}_grpc.pb.go" 2>/dev/null || true
+
+# Generate gRPC files
+echo "#:[.'.]:> 🔄 Regenerando archivos gRPC..."
+cd "$TEMP_DIR"
+bash bin/proto.sh
+
 # Move from temp to final destination
 echo "#:[.'.]:> 📦 Moviendo a ubicación final..."
 mkdir -p "$(dirname "$DESTINATION_DIR")"

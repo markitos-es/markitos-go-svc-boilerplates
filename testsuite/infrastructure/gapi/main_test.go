@@ -7,10 +7,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/gapi"
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
-	"github.com/markitos-es/markitos-svc-boilerplates/testsuite/infrastructure/testdb"
-	internal_test "github.com/markitos-es/markitos-svc-boilerplates/testsuite/internal"
+	"markitos-svc-boilerplates/infrastructure/gapi"
+	"markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/testsuite/infrastructure/testdb"
+	internal_test "markitos-svc-boilerplates/testsuite/internal"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 )

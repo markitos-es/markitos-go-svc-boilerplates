@@ -12,11 +12,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/api"
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/configuration"
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/database"
-	"github.com/markitos-es/markitos-svc-boilerplates/infrastructure/gapi"
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/infrastructure/api"
+	"markitos-svc-boilerplates/infrastructure/configuration"
+	"markitos-svc-boilerplates/infrastructure/database"
+	"markitos-svc-boilerplates/infrastructure/gapi"
+	"markitos-svc-boilerplates/internal/domain"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/driver/postgres"

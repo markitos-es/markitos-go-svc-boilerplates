@@ -7,8 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/services"
-	internal_test "github.com/markitos-es/markitos-svc-boilerplates/testsuite/internal"
+	"markitos-svc-boilerplates/internal/services"
+	internal_test "markitos-svc-boilerplates/testsuite/internal"
+
 	"github.com/stretchr/testify/assert"
 )
 

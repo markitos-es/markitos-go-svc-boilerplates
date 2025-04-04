@@ -50,7 +50,7 @@ Este repositorio contiene boilerplates para servicios backend que incluyen:
 1. Clona este repositorio:
 
     ```bash
-    git clone https://github.com/markitos-es/markitos-svc-boilerplates.git
+    git clone https://markitos-svc-boilerplates.git
     cd markitos-svc-boilerplates
     ```
 

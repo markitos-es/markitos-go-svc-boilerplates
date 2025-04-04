@@ -1,6 +1,6 @@
 package services
 
-import "github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+import "markitos-svc-boilerplates/internal/domain"
 
 type BoilerplateOneRequest struct {
 	Id string `json:"id"`

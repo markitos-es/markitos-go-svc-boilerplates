@@ -1,7 +1,8 @@
 package gapi
 
 import (
-	"github.com/markitos-es/markitos-svc-boilerplates/internal/domain"
+	"markitos-svc-boilerplates/internal/domain"
+
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
