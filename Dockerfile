@@ -11,9 +11,9 @@
 # ------------
 # Para ejecutar con variables de entorno:
 #    docker run -p 3000:3000 -p 30000:30000 \
-#      -e DATABASE_DSN="host=db user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
-#      -e HTTP_SERVER_ADDRESS=":3000" \
-#      -e GRPC_SERVER_ADDRESS=":30000" \
+#      -e BOILERPLATES_DATABASE_DSN="host=db user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable" \
+#      -e BOILERPLATES_HTTP_SERVER_ADDRESS=":3000" \
+#      -e BOILERPLATES_GRPC_SERVER_ADDRESS=":30000" \
 #      markitos-svc-boilerplates:1.0.0
 #
 # 🌐 CONEXIÓN:
@@ -60,9 +60,9 @@ EXPOSE 3000 30000
 #:[.'.]:> ¡Cambia estos valores para adaptar la app a tus necesidades!
 #:[.'.]:> Estas variables de entorno son valores por defecto.
 #:[.'.]:> Si defines estas variables al ejecutar el contenedor, tendrán prioridad sobre estos valores.
-ENV DATABASE_DSN="host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
-ENV HTTP_SERVER_ADDRESS=":3000"
-ENV GRPC_SERVER_ADDRESS=":30000"
+ENV BOILERPLATES_DATABASE_DSN="host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+ENV BOILERPLATES_HTTP_SERVER_ADDRESS=":3000"
+ENV BOILERPLATES_GRPC_SERVER_ADDRESS=":30000"
 
 #:[.'.]:> ¡La orden para arrancar nuestra máquina! Con formato exec para mejor gestión de señales
 #:[.'.]:> ¡A darle caña! 🔥

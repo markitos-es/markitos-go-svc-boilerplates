@@ -33,7 +33,7 @@ func GetDB() *gorm.DB {
 		log.Println("['.']:> 🧪 INICIALIZANDO ENTORNO DE PRUEBAS 🧪")
 		log.Println("['.']:> ==============================================")
 
-		if envDSN := os.Getenv("DATABASE_DSN"); envDSN != "" {
+		if envDSN := os.Getenv("BOILERPLATES_DATABASE_DSN"); envDSN != "" {
 			dsn = envDSN
 			configSource = "ENV VARS"
 			log.Println("['.']:> 🌟 ORIGEN DE CONFIGURACIÓN: VARIABLES DE ENTORNO")

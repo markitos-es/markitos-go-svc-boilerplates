@@ -24,9 +24,9 @@ import (
 // [.'.]:> 🧩 Estructura que contiene toda la configuración de la aplicación
 // [.'.]:> Cada campo se mapea a una variable de entorno o valor en app.env del mismo nombre
 type BoilerplateConfiguration struct {
-	DatabaseDsn       string `mapstructure:"DATABASE_DSN"`        // Cadena de conexión a la base de datos
-	HTTPServerAddress string `mapstructure:"HTTP_SERVER_ADDRESS"` // Dirección del servidor HTTP (ej: ":3000")
-	GRPCServerAddress string `mapstructure:"GRPC_SERVER_ADDRESS"` // Dirección del servidor gRPC (ej: ":30000")
+	DatabaseDsn       string `mapstructure:"BOILERPLATES_DATABASE_DSN"`        // Cadena de conexión a la base de datos
+	HTTPServerAddress string `mapstructure:"BOILERPLATES_HTTP_SERVER_ADDRESS"` // Dirección del servidor HTTP (ej: ":3000")
+	GRPCServerAddress string `mapstructure:"BOILERPLATES_GRPC_SERVER_ADDRESS"` // Dirección del servidor gRPC (ej: ":30000")
 }
 
 // [.'.]:> 🔄 Función principal que carga toda la configuración
@@ -36,9 +36,9 @@ func LoadConfiguration(configFilesPath string) (config BoilerplateConfiguration,
 	viper.AddConfigPath(configFilesPath)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
-	viper.BindEnv("DATABASE_DSN")
-	viper.BindEnv("HTTP_SERVER_ADDRESS")
-	viper.BindEnv("GRPC_SERVER_ADDRESS")
+	viper.BindEnv("BOILERPLATES_DATABASE_DSN")
+	viper.BindEnv("BOILERPLATES_HTTP_SERVER_ADDRESS")
+	viper.BindEnv("BOILERPLATES_GRPC_SERVER_ADDRESS")
 	viper.AutomaticEnv()
 
 	if err := loadConfigFile(); err != nil {
@@ -80,19 +80,19 @@ func loadConfigFile() error {
 // [.'.]:> Esta es la clave para que las variables de entorno tengan prioridad
 // [.'.]:> sobre el archivo de configuración
 func overrideWithEnvVars() {
-	dsnEnv := os.Getenv("DATABASE_DSN")
-	if dsnEnv != "" && viper.GetString("DATABASE_DSN") == "" {
-		viper.Set("DATABASE_DSN", dsnEnv)
+	dsnEnv := os.Getenv("BOILERPLATES_DATABASE_DSN")
+	if dsnEnv != "" && viper.GetString("BOILERPLATES_DATABASE_DSN") == "" {
+		viper.Set("BOILERPLATES_DATABASE_DSN", dsnEnv)
 	}
 
-	httpEnv := os.Getenv("HTTP_SERVER_ADDRESS")
-	if httpEnv != "" && viper.GetString("HTTP_SERVER_ADDRESS") == "" {
-		viper.Set("HTTP_SERVER_ADDRESS", httpEnv)
+	httpEnv := os.Getenv("BOILERPLATES_HTTP_SERVER_ADDRESS")
+	if httpEnv != "" && viper.GetString("BOILERPLATES_HTTP_SERVER_ADDRESS") == "" {
+		viper.Set("BOILERPLATES_HTTP_SERVER_ADDRESS", httpEnv)
 	}
 
-	grpcEnv := os.Getenv("GRPC_SERVER_ADDRESS")
-	if grpcEnv != "" && viper.GetString("GRPC_SERVER_ADDRESS") == "" {
-		viper.Set("GRPC_SERVER_ADDRESS", grpcEnv)
+	grpcEnv := os.Getenv("BOILERPLATES_GRPC_SERVER_ADDRESS")
+	if grpcEnv != "" && viper.GetString("BOILERPLATES_GRPC_SERVER_ADDRESS") == "" {
+		viper.Set("BOILERPLATES_GRPC_SERVER_ADDRESS", grpcEnv)
 	}
 }
 
@@ -101,12 +101,12 @@ func overrideWithEnvVars() {
 // [.'.]:> después de procesar el archivo y las variables a través de viper
 func applyFallbackEnvVars(config *BoilerplateConfiguration) {
 	if config.DatabaseDsn == "" {
-		config.DatabaseDsn = os.Getenv("DATABASE_DSN")
+		config.DatabaseDsn = os.Getenv("BOILERPLATES_DATABASE_DSN")
 	}
 	if config.HTTPServerAddress == "" {
-		config.HTTPServerAddress = os.Getenv("HTTP_SERVER_ADDRESS")
+		config.HTTPServerAddress = os.Getenv("BOILERPLATES_HTTP_SERVER_ADDRESS")
 	}
 	if config.GRPCServerAddress == "" {
-		config.GRPCServerAddress = os.Getenv("GRPC_SERVER_ADDRESS")
+		config.GRPCServerAddress = os.Getenv("BOILERPLATES_GRPC_SERVER_ADDRESS")
 	}
 }

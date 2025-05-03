@@ -150,7 +150,7 @@ jobs:
           make createdb && \
           make testv
         env:
-          DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+          BOILERPLATES_DATABASE_DSN: "host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
           PGUSER: admin
           PGPASSWORD: admin
           PGHOST: localhost

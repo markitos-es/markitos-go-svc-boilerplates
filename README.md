@@ -142,18 +142,18 @@ Este proyecto está diseñado para ser configurado principalmente a través de v
 
 1. **Variables obligatorias:**
 
-    - `DATABASE_DSN`: Cadena de conexión a la base de datos PostgreSQL. Ejemplo:
+    - `BOILERPLATES_DATABASE_DSN`: Cadena de conexión a la base de datos PostgreSQL. Ejemplo:
 
         ```text
         host=localhost user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable
         ```
 
-    - `HTTP_SERVER_ADDRESS`: Dirección del servidor REST. Ejemplo: `:3000`
-    - `GRPC_SERVER_ADDRESS`: Dirección del servidor gRPC. Ejemplo: `:30000`
+    - `BOILERPLATES_HTTP_SERVER_ADDRESS`: Dirección del servidor REST. Ejemplo: `:3000`
+    - `BOILERPLATES_GRPC_SERVER_ADDRESS`: Dirección del servidor gRPC. Ejemplo: `:30000`
 
 2. **Variables opcionales:**
 
-    - Si no se especifican `HTTP_SERVER_ADDRESS` y `GRPC_SERVER_ADDRESS`, se usarán los valores por defecto (`:3000` y `:30000` respectivamente).
+    - Si no se especifican `BOILERPLATES_HTTP_SERVER_ADDRESS` y `BOILERPLATES_GRPC_SERVER_ADDRESS`, se usarán los valores por defecto (`:3000` y `:30000` respectivamente).
 
 ### Prioridad de configuración 🥇
 
@@ -172,9 +172,9 @@ services:
       - "3000:3000"
       - "30000:30000"
     environment:
-      DATABASE_DSN: "host=db user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
-      HTTP_SERVER_ADDRESS: ":3000"
-      GRPC_SERVER_ADDRESS: ":30000"
+      BOILERPLATES_DATABASE_DSN: "host=db user=admin password=admin dbname=markitos-svc-boilerplates sslmode=disable"
+      BOILERPLATES_HTTP_SERVER_ADDRESS: ":3000"
+      BOILERPLATES_GRPC_SERVER_ADDRESS: ":30000"
 ```
 
 ### Recomendaciones ✅

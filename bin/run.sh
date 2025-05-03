@@ -17,11 +17,11 @@ echo
 # USO:
 #:[.'.]:> En desarrollo:
 #:[.'.]:>   ./bin/run.sh                           → Usa valores por defecto
-#:[.'.]:>   DATABASE_DSN=... HTTP_SERVER_ADDRESS=... ./bin/run.sh → Personalizado
+#:[.'.]:>   BOILERPLATES_DATABASE_DSN=... BOILERPLATES_HTTP_SERVER_ADDRESS=... ./bin/run.sh → Personalizado
 #:[.'.]:> 
 #:[.'.]:> Con make:
 #:[.'.]:>   make run                               → Usa valores por defecto
-#:[.'.]:>   DATABASE_DSN=... make run              → Personalizado
+#:[.'.]:>   BOILERPLATES_DATABASE_DSN=... make run              → Personalizado
 
 # go to root of project
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

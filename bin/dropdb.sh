@@ -40,9 +40,9 @@ show_config "full"
 #:[.'.]:>-------------------------------------
 
 
-# Extraer datos de conexión de DATABASE_DSN
-DB_NAME=$(echo "$DATABASE_DSN" | awk -F'[ =]' '{for(i=1;i<=NF;i++){if($i=="dbname"){print $(i+1)}}}')
-DB_USER=$(echo "$DATABASE_DSN" | awk -F'[ =]' '{for(i=1;i<=NF;i++){if($i=="user"){print $(i+1)}}}')
+# Extraer datos de conexión de BOILERPLATES_DATABASE_DSN
+DB_NAME=$(echo "$BOILERPLATES_DATABASE_DSN" | awk -F'[ =]' '{for(i=1;i<=NF;i++){if($i=="dbname"){print $(i+1)}}}')
+DB_USER=$(echo "$BOILERPLATES_DATABASE_DSN" | awk -F'[ =]' '{for(i=1;i<=NF;i++){if($i=="user"){print $(i+1)}}}')
 
 # Eliminar base de datos y usuario
 log_info "Eliminando base de datos y usuario asociados"
